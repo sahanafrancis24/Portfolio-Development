@@ -116,8 +116,6 @@ app.post('/api/contact', async (req, res) => {
     return res.status(500).json({ error: 'Unable to save or deliver message.' })
   }
 })
-  }
-})
 
 app.listen(PORT, () => {
   console.log(`Portfolio API running on http://localhost:${PORT}`)

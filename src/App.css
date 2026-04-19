@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
   --grad-1: #4facfe;
@@ -53,7 +53,19 @@ a {
 .app-shell {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.background-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -3;
+  opacity: 1;
+  pointer-events: none;
 }
 
 .page-loader {
@@ -111,40 +123,26 @@ a {
   box-shadow: 0 0 24px rgba(0, 245, 255, 0.22);
 }
 
-.bg-layer {
+.canvas-container {
   position: fixed;
   inset: 0;
   z-index: -2;
-  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: auto; /* Allow interaction with the 3D scene */
 }
 
-.bg-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.02);
-  filter: brightness(1.24) contrast(1.18) saturate(1.12);
-  image-rendering: -webkit-optimize-contrast;
+/* Ensure the main content allows clicking through to the 3D canvas where it's transparent */
+main {
+  pointer-events: none;
 }
 
-.bg-video-overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 25% 20%, rgba(79, 172, 254, 0.1), transparent 42%),
-    radial-gradient(circle at 75% 70%, rgba(249, 83, 198, 0.08), transparent 46%),
-    linear-gradient(180deg, rgba(10, 8, 25, 0.2), rgba(10, 8, 25, 0.34));
+main > section {
+  pointer-events: none;
 }
 
-.animated-gradient {
-  position: absolute;
-  inset: -20%;
-  background: radial-gradient(circle at 20% 20%, rgba(79, 172, 254, 0.25), transparent 40%),
-    radial-gradient(circle at 80% 35%, rgba(123, 47, 247, 0.26), transparent 45%),
-    radial-gradient(circle at 40% 80%, rgba(249, 83, 198, 0.24), transparent 45%);
-  filter: blur(40px);
-  transition: transform 0.28s linear;
+.glass-card, .magnetic-btn, a, button, input, textarea {
+  pointer-events: auto;
 }
 
 .floating-blob {
@@ -188,21 +186,17 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
-  text-shadow: 
-    /* 3D depth layers */
+  text-shadow:
     -2px -2px 0 rgba(123, 47, 247, 0.5),
     -3px -3px 0 rgba(123, 47, 247, 0.4),
     -4px -4px 0 rgba(123, 47, 247, 0.3),
-    /* Neon cyan glow */
     0 0 10px #00f5ff,
     0 0 20px #00f5ff,
     0 0 30px #00f5ff,
     0 0 40px #00f5ff,
-    /* Neon purple glow */
     0 0 5px #7b2ff7,
     0 0 15px #7b2ff7,
     0 0 25px #7b2ff7,
-    /* Pink accent */
     0 0 8px #f953c6;
   filter: drop-shadow(0 0 15px rgba(0, 245, 255, 0.6)) drop-shadow(0 0 25px rgba(123, 47, 247, 0.4));
 }
@@ -251,12 +245,14 @@ main {
   margin: 0 auto;
   padding-top: 6rem;
   padding-bottom: 4rem;
+  overflow: visible;
 }
 
 section {
   position: relative;
   margin: 0 auto 4.4rem;
   scroll-margin-top: 7rem;
+  overflow: visible;
 }
 
 .reveal-section {
@@ -285,8 +281,6 @@ section h2 {
   display: grid;
   place-items: center;
 }
-
-
 
 .hero-content {
   max-width: 760px;
@@ -561,9 +555,11 @@ section h2 {
 }
 
 .project-card {
-  padding: 1.15rem;
+  padding: 0;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card::after {
@@ -585,32 +581,93 @@ section h2 {
   opacity: 1;
 }
 
+.project-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.05);
+}
+
+.project-github-link {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(10, 10, 10, 0.7);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.project-github-link:hover {
+  transform: scale(1.1);
+  background: rgba(10, 10, 10, 0.9);
+}
+
+.project-content {
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .project-card h3 {
   margin-top: 0;
+  margin-bottom: 0.5rem;
   font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
 }
 
 .project-card p {
   color: var(--text-secondary);
-  min-height: 82px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  flex: 1;
 }
 
 .projects-grid-five {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-.stack-tags {
+.stack-tags-text {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.6rem;
+  margin-top: auto;
 }
 
-.stack-tags span {
-  padding: 0.3rem 0.62rem;
-  border-radius: 999px;
-  font-size: 0.74rem;
-  background: rgba(123, 47, 247, 0.15);
-  border: 1px solid rgba(123, 47, 247, 0.32);
+.stack-tag {
+  color: var(--grad-1); /* Light blue accent */
+  font-size: 0.85rem;
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 500;
+}
+
+.stack-tag:nth-child(2n) {
+  color: var(--grad-2); /* Purple accent */
+}
+
+.stack-tag:nth-child(3n) {
+  color: var(--grad-3); /* Pink accent */
 }
 
 .project-actions {
@@ -640,33 +697,58 @@ section h2 {
 
 .gamedev .game-layout {
   display: block;
-  min-height: 820px;
-  padding-right: clamp(360px, 48vw, 620px);
+  min-height: 980px;
 }
 
 .gamedev {
   position: relative;
-  overflow: hidden;
-  min-height: 860px;
+  min-height: 112vh;
+  padding: 4rem 5% 1rem;
+  width: 100vw;
+  max-width: none;
+  margin: 0;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  overflow: visible;
+  z-index: 3;
 }
 
 .game-info {
-  max-width: 760px;
-  min-height: 350px;
-  padding: 1rem;
-  position: relative;
+  position: absolute;
+  top: 45%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: min(1180px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
   z-index: 2;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: white;
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
 }
 
 .spline-gamedev-free {
   position: absolute;
-  right: clamp(6px, 2vw, 10px);
-  top: clamp(3.5rem, 6vh, 4.8rem);
-  width: clamp(420px, 54vw, 720px);
-  height: clamp(420px, 68vh, 720px);
+  top: 68%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.82);
+  width: 182vw;
+  height: 176vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
   z-index: 1;
-  background: transparent;
-  pointer-events: auto;
 }
 
 .spline-gamedev-free iframe {
@@ -675,10 +757,72 @@ section h2 {
   border: 0;
   display: block;
   background: transparent;
-  border-radius: 12px;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
 }
 
+.model-viewer-shell,
+.model-viewer-shell > div,
+.model-viewer-canvas {
+  overflow: visible !important;
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
 
+.model-viewer-canvas canvas {
+  overflow: visible !important;
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+.model-viewer-shell canvas,
+.model-viewer-shell > div,
+.model-viewer-shell > div > div {
+  overflow: visible !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+.gamedev,
+.gamedev .game-layout,
+.gamedev canvas,
+.gamedev canvas:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.game-info h3 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: clamp(1.55rem, 2vw, 2rem);
+}
+
+.game-info p {
+  max-width: 1080px;
+  margin: 0 auto 1.35rem;
+  font-size: clamp(1rem, 1.35vw, 1.28rem);
+  line-height: 1.52;
+}
+
+.game-info .highlight-row {
+  justify-content: center;
+  max-width: 1100px;
+  margin: 0.5rem auto 0;
+}
 
 .github-grid {
   display: grid;
@@ -1112,21 +1256,29 @@ section h2 {
   }
 
   .game-info {
-    max-width: 100%;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    padding: 0;
+    margin-top: 3rem;
   }
 
   .gamedev .game-layout {
     min-height: 0;
-    padding-right: 0;
+  }
+
+  .game-info p {
+    max-width: 100%;
+    font-size: 1rem;
   }
 
   .spline-gamedev-free {
-    position: relative;
-    top: auto;
-    right: auto;
-    width: 100%;
-    height: 320px;
-    margin-bottom: 0.9rem;
+    top: 66%;
+    transform: translate(-50%, -50%) scale(0.72);
+    width: 190vw;
+    height: 140vh;
   }
 }
 
@@ -1138,5 +1290,3 @@ section h2 {
     animation: none !important;
   }
 }
-
-

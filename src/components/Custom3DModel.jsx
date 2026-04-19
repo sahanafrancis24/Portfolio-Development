@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Center, useGLTF, useAnimations } from '@react-three/drei'
+import { useGLTF, useAnimations } from '@react-three/drei'
 import { Box3, Vector3 } from 'three'
 
 export function Custom3DModel({ url, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], animation = 'rotate' }) {
   const meshRef = useRef()
-  const [offsetY, setOffsetY] = useState(0)
+  const [normalizedOffset, setNormalizedOffset] = useState([0, 0, 0])
 
   // Load the GLTF model and animations
   const { scene, animations } = useGLTF(url)
@@ -14,7 +14,6 @@ export function Custom3DModel({ url, scale = 1, position = [0, 0, 0], rotation =
   useEffect(() => {
     if (!scene) return
     const tempSize = new Vector3()
-    const sceneBox = new Box3().setFromObject(scene)
 
     scene.traverse((child) => {
       if (!child.isMesh) return
@@ -41,10 +40,15 @@ export function Custom3DModel({ url, scale = 1, position = [0, 0, 0], rotation =
       }
     })
 
+    const sceneBox = new Box3().setFromObject(scene)
     if (sceneBox.isEmpty() === false) {
-      const size = new Vector3()
-      sceneBox.getSize(size)
-      setOffsetY(size.y * 0.55)
+      const center = new Vector3()
+      sceneBox.getCenter(center)
+      setNormalizedOffset([
+        -center.x,
+        -sceneBox.min.y,
+        -center.z,
+      ])
     }
   }, [scene])
 
@@ -88,15 +92,17 @@ export function Custom3DModel({ url, scale = 1, position = [0, 0, 0], rotation =
   })
 
   return (
-    <Center>
+    <group
+      ref={meshRef}
+      scale={scale}
+      position={[position[0], position[1], position[2]]}
+      rotation={rotation}
+    >
       <primitive
-        ref={meshRef}
         object={scene}
-        scale={scale}
-        position={[position[0], position[1] + offsetY, position[2]]}
-        rotation={rotation}
+        position={normalizedOffset}
       />
-    </Center>
+    </group>
   )
 }
 

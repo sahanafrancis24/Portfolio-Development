@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import {
@@ -15,9 +15,8 @@ import {
   FiUser,
 } from 'react-icons/fi'
 import { FaGamepad } from 'react-icons/fa6'
-import bgVideo from './assets/4k Video _ Technology Looped Background _ No Copyright Loop Background Video.mp4'
-import dragonModel from './assets/black_dragon_with_idle_animation.glb'
-import { ModelViewer } from './components/ModelViewer'
+import { Canvas } from '@react-three/fiber'
+import { Scene3D } from './components/Scene3D'
 import './App.css'
 
 const navItems = [
@@ -81,11 +80,31 @@ const skillGroups = [
 
 const projects = [
   {
+    title: 'Ruffs Cafe',
+    description:
+      'Premium cafe brand website showcasing specialty coffee, pastries, and ambiance. Features elegant menu displays, location information, and online reservation system with smooth animations and responsive mobile experience.',
+    stack: ['React', 'Tailwind CSS', 'Node.js'],
+    github: 'https://github.com/sahanafrancis24?tab=repositories&q=ruffs-cafe',
+    link: 'https://ruffscafe.netlify.app/',
+    image: '/ruffs-cafe.png',
+  },
+  {
+    title: 'Jewellery Website',
+    description:
+      'Elegant and responsive e-commerce platform for fine jewellery, featuring product galleries, detailed descriptions, and a seamless shopping experience.',
+    stack: ['React', 'Web Design', 'UI/UX'],
+    github: 'https://github.com/sahanafrancis24?tab=repositories',
+    link: 'https://elvanijewellers.netlify.app/',
+    image: '/jewellery.png',
+  },
+  {
     title: 'Cake E-Commerce Website',
     description:
       'Responsive shopping experience with product listings, cart interactions, and checkout-focused UI design.',
     stack: ['React', 'Node.js', 'MySQL'],
     github: 'https://github.com/sahanafrancis24?tab=repositories&q=cake',
+    link: 'https://heavnlyslice.netlify.app/',
+    image: '/cake.png',
   },
   {
     title: 'Nail Salon Booking Website',
@@ -93,13 +112,17 @@ const projects = [
       'Appointment platform with service browsing, booking flow, and mobile-first interface optimization.',
     stack: ['React', 'Express', 'Firebase'],
     github: 'https://github.com/sahanafrancis24?tab=repositories&q=nail',
+    link: 'https://galaxynailsbeautysalon.netlify.app/',
+    image: '/nail-salon.png',
   },
   {
-    title: 'Café Website',
+    title: 'Cafe Website',
     description:
       'Modern cafe brand site featuring menu storytelling, refined visuals, and smooth micro-interactions.',
     stack: ['HTML', 'CSS', 'JavaScript'],
     github: 'https://github.com/sahanafrancis24?tab=repositories&q=cafe',
+    link: 'https://bloombrewcafeisland.netlify.app/',
+    image: '/cafe.png',
   },
   {
     title: 'AI-Medical-Chatbot',
@@ -107,6 +130,7 @@ const projects = [
       'Healthcare-focused chatbot prototype for guided medical query responses with a clean conversational flow.',
     stack: ['Dart', 'Flutter', 'AI Chat'],
     github: 'https://github.com/sahanafrancis24/AI-Medical-Chatbot',
+    image: '/chatbot.png',
   },
   {
     title: 'structurologic-engine',
@@ -114,13 +138,8 @@ const projects = [
       'JavaScript engine-focused project with modular logic utilities and structured processing workflows.',
     stack: ['JavaScript', 'Logic Engine', 'Utilities'],
     github: 'https://github.com/sahanafrancis24/structurologic-engine',
-  },
-  {
-    title: 'Ruffs Café',
-    description:
-      'Premium café brand website showcasing specialty coffee, pastries, and ambiance. Features elegant menu displays, location information, and online reservation system with smooth animations and responsive mobile experience.',
-    stack: ['React', 'Tailwind CSS', 'Node.js'],
-    github: 'https://github.com/sahanafrancis24?tab=repositories&q=ruffs-cafe',
+    link: 'https://structurologicengine.netlify.app/',
+    image: '/structurologic.png',
   },
 ]
 
@@ -140,19 +159,20 @@ const timeline = [
 ]
 
 const sectionVariant = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 100, scale: 0.9 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: 'easeOut', staggerChildren: 0.08 },
+    scale: 1,
+    transition: { type: 'spring', stiffness: 60, damping: 15, staggerChildren: 0.12 },
   },
 }
 
 const sectionRevealProps = {
-  initial: { opacity: 0, y: 80, filter: 'blur(10px)' },
-  whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  viewport: { once: false, amount: 0.22 },
-  transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
+  initial: { opacity: 0, y: 30, scale: 0.98, rotateX: -2, filter: 'blur(5px)' },
+  whileInView: { opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' },
+  viewport: { once: true, amount: 0.05 },
+  transition: { type: 'spring', stiffness: 50, damping: 15, mass: 1.5 },
 }
 
 function AnimatedCounter({ value }) {
@@ -261,8 +281,10 @@ function App() {
   const [typedText, setTypedText] = useState('')
   const [typingIndex, setTypingIndex] = useState(0)
   const [deleting, setDeleting] = useState(false)
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
-  const [cursorTrail, setCursorTrail] = useState({ x: 0, y: 0 })
+  const cursorPos = useRef({ x: 0, y: 0 })
+  const cursorTrail = useRef({ x: 0, y: 0 })
+  const dotRef = useRef(null)
+  const trailRef = useRef(null)
   const [logoClicks, setLogoClicks] = useState(0)
   const [easterMessage, setEasterMessage] = useState('')
   const [showLoader, setShowLoader] = useState(true)
@@ -270,7 +292,13 @@ function App() {
   const [githubProfile, setGithubProfile] = useState(null)
   const [githubRepos, setGithubRepos] = useState([])
 
-  const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', message: '', contactMethod: 'email' })
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    contactMethod: 'email',
+  })
   const [errors, setErrors] = useState({})
   const [sending, setSending] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
@@ -311,7 +339,10 @@ function App() {
     }
 
     const onMove = (event) => {
-      setCursorPos({ x: event.clientX, y: event.clientY })
+      cursorPos.current = { x: event.clientX, y: event.clientY }
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${cursorPos.current.x}px, ${cursorPos.current.y}px, 0)`
+      }
     }
 
     onScroll()
@@ -373,29 +404,37 @@ function App() {
   useEffect(() => {
     let raf
     const tick = () => {
+      const cx = cursorPos.current.x
+      const cy = cursorPos.current.y
       if (gamedevRef.current) {
         const rect = gamedevRef.current.getBoundingClientRect()
-        const isInGamedev = cursorPos.x >= rect.left && cursorPos.x <= rect.right && cursorPos.y >= rect.top && cursorPos.y <= rect.bottom
+        const isInGamedev =
+          cx >= rect.left &&
+          cx <= rect.right &&
+          cy >= rect.top &&
+          cy <= rect.bottom
         const ease = isInGamedev ? 0.08 : 0.27
-        setCursorTrail((prev) => ({
-          x: prev.x + (cursorPos.x - prev.x) * ease,
-          y: prev.y + (cursorPos.y - prev.y) * ease,
-        }))
+        cursorTrail.current.x += (cx - cursorTrail.current.x) * ease
+        cursorTrail.current.y += (cy - cursorTrail.current.y) * ease
       } else {
-        setCursorTrail((prev) => ({
-          x: prev.x + (cursorPos.x - prev.x) * 0.27,
-          y: prev.y + (cursorPos.y - prev.y) * 0.27,
-        }))
+        cursorTrail.current.x += (cx - cursorTrail.current.x) * 0.27
+        cursorTrail.current.y += (cy - cursorTrail.current.y) * 0.27
+      }
+      if (trailRef.current) {
+        trailRef.current.style.transform = `translate3d(${cursorTrail.current.x}px, ${cursorTrail.current.y}px, 0)`
       }
       raf = requestAnimationFrame(tick)
     }
     tick()
     return () => cancelAnimationFrame(raf)
-  }, [cursorPos.x, cursorPos.y])
+  }, [])
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setCursorPos({ x: e.clientX, y: e.clientY })
+      cursorPos.current = { x: e.clientX, y: e.clientY }
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${cursorPos.current.x}px, ${cursorPos.current.y}px, 0)`
+      }
     }
 
     document.addEventListener('mousemove', handleMouseMove, true)
@@ -426,7 +465,12 @@ function App() {
 
   useEffect(() => {
     if (logoClicks < 5) return
-    confetti({ particleCount: 220, spread: 130, origin: { y: 0.35 }, colors: ['#4facfe', '#7b2ff7', '#f953c6', '#00f5ff'] })
+    confetti({
+      particleCount: 220,
+      spread: 130,
+      origin: { y: 0.35 },
+      colors: ['#4facfe', '#7b2ff7', '#f953c6', '#00f5ff'],
+    })
     setEasterMessage('Logo combo complete: surprise confetti activated.')
     setLogoClicks(0)
   }, [logoClicks])
@@ -447,91 +491,119 @@ function App() {
     oscillator.stop(context.currentTime + 0.14)
   }
 
-  const handleNavClick = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const handleNavClick = (id) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
   const validateForm = () => {
     const nextErrors = {}
     if (!contactForm.name.trim()) nextErrors.name = 'Please enter your name.'
     if (contactForm.contactMethod === 'email') {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) nextErrors.email = 'Please enter a valid email.'
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
+        nextErrors.email = 'Please enter a valid email.'
+      }
     } else {
-      if (!contactForm.phone.replace(/\D/g, '').length) nextErrors.phone = 'Please enter a valid WhatsApp number.'
+      if (!contactForm.phone.replace(/\D/g, '').length) {
+        nextErrors.phone = 'Please enter a valid WhatsApp number.'
+      }
     }
-    if (contactForm.message.trim().length < 12) nextErrors.message = 'Message should be at least 12 characters.'
+    if (contactForm.message.trim().length < 12) {
+      nextErrors.message = 'Message should be at least 12 characters.'
+    }
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
   }
 
   const submitContact = async (event) => {
-  event.preventDefault()
+    event.preventDefault()
 
-  if (!validateForm()) return
+    if (!validateForm()) return
 
+    if (contactForm.contactMethod === 'whatsapp') {
+      const phone = '919363065542'
+      const text = `Hi Sahana, ${contactForm.message}`
 
-  if (contactForm.contactMethod === 'whatsapp') {
-    const phone = "919363065542" 
-    const text = `Hi Sahana, ${contactForm.message}`
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`)
 
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`)
-
-    return 
-  }
-
-  setSending(true)
-  setSubmitMessage('')
-
-  try {
-    const response = await fetch('https://formspree.io/f/xqewkzeg', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        name: contactForm.name,
-        email: contactForm.email,
-        message: contactForm.message,
-      }),
-    })
-
-    if (response.ok) {
-      setSubmitMessage('✅ Message sent successfully!')
-      setContactForm({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-        contactMethod: 'email',
-      })
-    } else {
-      setSubmitMessage('❌ Something went wrong')
+      return
     }
-  } catch {
-    setSubmitMessage('❌ Network error')
-  } finally {
-    setSending(false)
+
+    setSending(true)
+    setSubmitMessage('')
+
+    try {
+      const response = await fetch('https://formspree.io/f/xqewkzeg', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          message: contactForm.message,
+        }),
+      })
+
+      if (response.ok) {
+        setSubmitMessage('âœ… Message sent successfully!')
+        setContactForm({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          contactMethod: 'email',
+        })
+      } else {
+        setSubmitMessage('âŒ Something went wrong')
+      }
+    } catch {
+      setSubmitMessage('âŒ Network error')
+    } finally {
+      setSending(false)
+    }
   }
-}
 
   return (
     <div className="app-shell">
       <AnimatePresence>
         {showLoader && (
-          <motion.div className="page-loader" initial={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '-100%' }} transition={{ duration: 0.75, ease: [0.19, 1, 0.22, 1] }}>
+          <motion.div
+            className="page-loader"
+            initial={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '-100%' }}
+            transition={{ duration: 0.75, ease: [0.19, 1, 0.22, 1] }}
+          >
             <span>Sahana F</span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="cursor-dot" style={{ transform: `translate3d(${cursorPos.x}px, ${cursorPos.y}px, 0)` }} />
-      <div className="cursor-trail" style={{ transform: `translate3d(${cursorTrail.x}px, ${cursorTrail.y}px, 0)` }} />
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="background-video"
+      >
+        <source src="/background.mp4" type="video/mp4" />
+      </video>
+
+      <div
+        ref={dotRef}
+        className="cursor-dot"
+        style={{ transform: `translate3d(0px, 0px, 0)` }}
+      />
+      <div
+        ref={trailRef}
+        className="cursor-trail"
+        style={{ transform: `translate3d(0px, 0px, 0)` }}
+      />
       <div className="progress-bar" style={{ width: `${progress}%` }} />
 
-      <div className="bg-layer" aria-hidden>
-        <video className="bg-video" autoPlay muted loop playsInline>
-          <source src={bgVideo} type="video/mp4" />
-        </video>
-        <div className="bg-video-overlay" />
+      <div className="canvas-container">
+        <Canvas eventSource={document.body}>
+          <Scene3D />
+        </Canvas>
       </div>
 
       <header className="site-nav">
@@ -541,58 +613,117 @@ function App() {
 
         <nav>
           {navItems.map((item) => (
-            <button key={item.id} className={activeSection === item.id ? 'active' : ''} onClick={() => handleNavClick(item.id)}>
+            <button
+              key={item.id}
+              className={activeSection === item.id ? 'active' : ''}
+              onClick={() => handleNavClick(item.id)}
+            >
               {item.label}
             </button>
           ))}
         </nav>
-
       </header>
 
       {easterMessage && <div className="easter-banner">{easterMessage}</div>}
 
       <main>
         <section id="home" className="hero">
-          <motion.div className="hero-content" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1><span>Sahana F</span></h1>
-            <p className="typing-line">{typedText}<span className="typing-caret">|</span></p>
-            <p className="hero-subtext">I build responsive web applications and create clean, interactive user experiences.</p>
+          <motion.div
+            className="hero-content"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1>
+              <span>Sahana F</span>
+            </h1>
+            <p className="typing-line">
+              {typedText}
+              <span className="typing-caret">|</span>
+            </p>
+            <p className="hero-subtext">
+              I build responsive web applications and create clean, interactive user experiences.
+            </p>
             <div className="hero-actions">
-              <MagneticButton className="primary" onClick={() => handleNavClick('projects')}>View Projects</MagneticButton>
-              <MagneticButton className="secondary" onClick={() => handleNavClick('contact')}>Contact Me</MagneticButton>
+              <MagneticButton className="primary" onClick={() => handleNavClick('projects')}>
+                View Projects
+              </MagneticButton>
+              <MagneticButton className="secondary" onClick={() => handleNavClick('contact')}>
+                Contact Me
+              </MagneticButton>
             </div>
             <div className="social-row">
-              <a href="https://github.com/sahanafrancis24" target="_blank" rel="noreferrer"><FiGithub /></a>
-              <a href="https://www.linkedin.com/in/sahana-f-0427492a9" target="_blank" rel="noreferrer"><FiLinkedin /></a>
+              <a href="https://github.com/sahanafrancis24" target="_blank" rel="noreferrer">
+                <FiGithub />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/sahana-f-0427492a9"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FiLinkedin />
+              </a>
             </div>
           </motion.div>
         </section>
 
-        <motion.section id="about" className="reveal-section" variants={sectionVariant} {...sectionRevealProps}>
+        <motion.section
+          id="about"
+          className="reveal-section"
+          variants={sectionVariant}
+          {...sectionRevealProps}
+        >
           <h2>About</h2>
           <div className="about-grid">
-            <motion.div initial={{ opacity: 0, y: 35, filter: 'blur(10px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={{ once: true }}>
+            <motion.div
+              initial={{ opacity: 0, y: 35, filter: 'blur(10px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true }}
+            >
               <TiltCard className="glass-card intro-card">
-                <h3><FiUser /> About Me</h3>
+                <h3>
+                  <FiUser /> About Me
+                </h3>
                 <p>
-                  I am passionate about building modern web applications and creating intuitive user interfaces. With a strong foundation in programming and problem-solving, I focus on developing responsive, efficient, and user-friendly digital solutions. I also bring a unique perspective by combining technology with domain knowledge in Bioinformatics.
+                  I am passionate about building modern web applications and creating intuitive user
+                  interfaces. With a strong foundation in programming and problem-solving, I focus on
+                  developing responsive, efficient, and user-friendly digital solutions. I also bring
+                  a unique perspective by combining technology with domain knowledge in Bioinformatics.
                 </p>
                 <div className="highlight-row">
-                  <span><FiCode /> Real project implementation</span>
-                  <span><FiCpu /> Growth-focused engineering mindset</span>
+                  <span>
+                    <FiCode /> Real project implementation
+                  </span>
+                  <span>
+                    <FiCpu /> Growth-focused engineering mindset
+                  </span>
                 </div>
               </TiltCard>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 35, filter: 'blur(10px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 35, filter: 'blur(10px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 }}
+            >
               <TiltCard className="glass-card intro-card">
-                <h3><FiGlobe /> UI & Frontend Development</h3>
+                <h3>
+                  <FiGlobe /> UI & Frontend Development
+                </h3>
                 <p>
-                  I specialize in designing and developing beautiful, interactive user interfaces that create meaningful user experiences. My approach combines responsive design principles, modern web technologies, and a keen eye for visual aesthetics to deliver web applications that are both functional and delightful.
+                  I specialize in designing and developing beautiful, interactive user interfaces that
+                  create meaningful user experiences. My approach combines responsive design
+                  principles, modern web technologies, and a keen eye for visual aesthetics to
+                  deliver web applications that are both functional and delightful.
                 </p>
                 <div className="highlight-row">
-                  <span><FiFigma /> Design & Prototyping</span>
-                  <span><FiGlobe /> Responsive & Interactive Experiences</span>
+                  <span>
+                    <FiFigma /> Design & Prototyping
+                  </span>
+                  <span>
+                    <FiGlobe /> Responsive & Interactive Experiences
+                  </span>
                 </div>
               </TiltCard>
             </motion.div>
@@ -615,7 +746,12 @@ function App() {
           </div>
         </motion.section>
 
-        <motion.section id="skills" className="reveal-section" variants={sectionVariant} {...sectionRevealProps}>
+        <motion.section
+          id="skills"
+          className="reveal-section"
+          variants={sectionVariant}
+          {...sectionRevealProps}
+        >
           <h2>Skills</h2>
           <div className="skills-grid">
             {skillGroups.map((group, groupIndex) => {
@@ -624,13 +760,15 @@ function App() {
                 <motion.article
                   key={group.title}
                   className="glass-card skill-card interactive-skill"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: groupIndex % 2 === 0 ? -50 : 50, y: 30 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
                   whileHover={{ scale: 1.03, y: -6 }}
                   viewport={{ once: true }}
                   transition={{ delay: groupIndex * 0.06, type: 'spring', stiffness: 170 }}
                 >
-                  <h3><Icon /> {group.title}</h3>
+                  <h3>
+                    <Icon /> {group.title}
+                  </h3>
                   <div className="skill-pill-grid">
                     {group.skills.map((skill, idx) => (
                       <motion.span
@@ -652,37 +790,83 @@ function App() {
           </div>
         </motion.section>
 
-        <motion.section id="projects" className="reveal-section" variants={sectionVariant} {...sectionRevealProps}>
-          <h2>Projects</h2>
-          <div className="projects-grid projects-grid-five">
-            {projects.map((project) => (
-              <TiltCard key={project.title} className="glass-card project-card" floating>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <div className="stack-tags">{project.stack.map((item) => <span key={item}>{item}</span>)}</div>
-                <div className="project-actions">
-                  <a href={project.github} target="_blank" rel="noreferrer">GitHub</a>
-                </div>
-              </TiltCard>
-            ))}
-          </div>
-        </motion.section>
+        <section id="projects">
+          <motion.div
+            className="reveal-section"
+            variants={sectionVariant}
+            {...sectionRevealProps}
+          >
+            <h2>Projects</h2>
+            <div className="projects-grid projects-grid-five">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50, y: 20 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: index * 0.1, type: 'spring', stiffness: 100 }}
+                  style={{ display: 'flex' }}
+                >
+                  <TiltCard className="glass-card project-card" floating>
+                    <div className="project-image-wrapper">
+                      <img src={project.image} alt={project.title} className="project-image" />
+                      <a href={project.github} target="_blank" rel="noreferrer" className="project-github-link" aria-label="GitHub Repository">
+                        <FiGithub />
+                      </a>
+                    </div>
+                    <div className="project-content">
+                      <h3>{project.title}</h3>
+                      <p>{project.description}</p>
+                      <div className="stack-tags-text">
+                        {project.stack.map((item) => (
+                          <span key={item} className="stack-tag">#{item.toLowerCase().replace(/\s+/g, '')}</span>
+                        ))}
+                      </div>
+                      {project.link && (
+                        <div className="project-actions">
+                          <a href={project.link} target="_blank" rel="noreferrer">
+                            Live Demo
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </TiltCard>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
 
-        <motion.section ref={gamedevRef} id="gamedev" className="gamedev reveal-section" variants={sectionVariant} {...sectionRevealProps}>
+        <motion.section
+          ref={gamedevRef}
+          id="gamedev"
+          className="gamedev reveal-section"
+          variants={sectionVariant}
+          {...sectionRevealProps}
+        >
           <h2>Game Development</h2>
           <div className="spline-gamedev-free" aria-label="3D showcase">
-            <ModelViewer
-              modelUrl={dragonModel}
-              animation="glb"
-              scale={0.75}
-              enableControls={true}
-            />
+            {/* The 3D dragon is now rendered in the global Scene3D background canvas */}
           </div>
           <div className="game-layout">
             <div className="game-info glass-card">
-              <h3><FaGamepad /> Unity + Blender</h3>
-              <p>Built advanced 3D scenes and interactive prototypes using Unity and Blender, focusing on object interaction, environment setup, gameplay fundamentals, and polished player feedback. I am currently developing an immersive 3D PC indie game set in a mysterious underwater world, with a strong emphasis on environmental storytelling, atmospheric depth, resource-driven exploration, and immersive physics-based movement.</p>
-              <p>This project combines procedural water effects, dynamic lighting, and textured underwater biomes to create a believable oceanic atmosphere. The core gameplay aims to balance exploration, discovery, and narrative encounters while using Blender assets, Unity shaders, and optimized scene composition for smooth performance.</p>
+              <h3>
+                <FaGamepad /> Unity + Blender
+              </h3>
+              <p>
+                Built advanced 3D scenes and interactive prototypes using Unity and Blender,
+                focusing on object interaction, environment setup, gameplay fundamentals, and
+                polished player feedback. I am currently developing an immersive 3D PC indie game
+                set in a mysterious underwater world, with a strong emphasis on environmental
+                storytelling, atmospheric depth, resource-driven exploration, and immersive
+                physics-based movement.
+              </p>
+              <p>
+                This project combines procedural water effects, dynamic lighting, and textured
+                underwater biomes to create a believable oceanic atmosphere. The core gameplay aims
+                to balance exploration, discovery, and narrative encounters while using Blender
+                assets, Unity shaders, and optimized scene composition for smooth performance.
+              </p>
               <div className="highlight-row">
                 <span>Advanced 3D scene composition</span>
                 <span>Interactive world-building</span>
@@ -694,15 +878,32 @@ function App() {
           </div>
         </motion.section>
 
-        <motion.section id="github" className="reveal-section" variants={sectionVariant} {...sectionRevealProps}>
+        <motion.section
+          id="github"
+          className="reveal-section"
+          variants={sectionVariant}
+          {...sectionRevealProps}
+        >
           <h2>GitHub</h2>
           <div className="github-grid">
             <TiltCard className="glass-card github-stats">
-              <h3><FiGithub /> Profile Metrics</h3>
+              <h3>
+                <FiGithub /> Profile Metrics
+              </h3>
               {githubProfile ? (
                 <div className="stats-grid">
-                  <article><b><AnimatedCounter value={githubProfile.public_repos} /></b><span>Repo Count</span></article>
-                  <article><b><AnimatedCounter value={recentActiveRepos} /></b><span>Recent Activity (30d)</span></article>
+                  <article>
+                    <b>
+                      <AnimatedCounter value={githubProfile.public_repos} />
+                    </b>
+                    <span>Repo Count</span>
+                  </article>
+                  <article>
+                    <b>
+                      <AnimatedCounter value={recentActiveRepos} />
+                    </b>
+                    <span>Recent Activity (30d)</span>
+                  </article>
                 </div>
               ) : (
                 <p>GitHub data unavailable right now.</p>
@@ -710,73 +911,154 @@ function App() {
             </TiltCard>
 
             <div className="glass-card github-graph">
-              <img src={`https://github-readme-activity-graph.vercel.app/graph?username=sahanafrancis24&from=${githubGraphStart}&to=${githubGraphEnd}&bg_color=0f0c29&color=00f5ff&line=f953c6&point=7b2ff7&area=true&hide_border=true`} alt="GitHub contribution graph" />
-              <p className="graph-caption">Contribution graph and activity trend from GitHub profile.</p>
+              <img
+                src={`https://github-readme-activity-graph.vercel.app/graph?username=sahanafrancis24&from=${githubGraphStart}&to=${githubGraphEnd}&bg_color=0f0c29&color=00f5ff&line=f953c6&point=7b2ff7&area=true&hide_border=true`}
+                alt="GitHub contribution graph"
+              />
+              <p className="graph-caption">
+                Contribution graph and activity trend from GitHub profile.
+              </p>
             </div>
 
             <div className="glass-card repo-list">
               <h3>Recent Repositories</h3>
-              {githubRepos.length ? githubRepos.slice(0, 6).map((repo) => (
-                <a key={repo.id} href={repo.html_url} target="_blank" rel="noreferrer">
-                  <div><strong>{repo.name}</strong><span>{repo.language || 'Multi-stack'}</span></div>
-                </a>
-              )) : <p>Repository feed unavailable right now.</p>}
+              {githubRepos.length ? (
+                githubRepos.slice(0, 6).map((repo) => (
+                  <a key={repo.id} href={repo.html_url} target="_blank" rel="noreferrer">
+                    <div>
+                      <strong>{repo.name}</strong>
+                      <span>{repo.language || 'Multi-stack'}</span>
+                    </div>
+                  </a>
+                ))
+              ) : (
+                <p>Repository feed unavailable right now.</p>
+              )}
             </div>
           </div>
         </motion.section>
 
-        <motion.section id="contact" className="reveal-section" variants={sectionVariant} {...sectionRevealProps}>
+        <motion.section
+          id="contact"
+          className="reveal-section"
+          variants={sectionVariant}
+          {...sectionRevealProps}
+        >
           <h2>Contact</h2>
           <form className="contact-form glass-card" onSubmit={submitContact} noValidate>
             <label className={errors.name ? 'invalid' : ''}>
-              <input type="text" value={contactForm.name} onChange={(event) => setContactForm((prev) => ({ ...prev, name: event.target.value }))} placeholder=" " />
+              <input
+                type="text"
+                value={contactForm.name}
+                onChange={(event) =>
+                  setContactForm((prev) => ({ ...prev, name: event.target.value }))
+                }
+                placeholder=" "
+              />
               <span>Name</span>
             </label>
 
             <div className="contact-method-toggle">
-              <button type="button" className={contactForm.contactMethod === 'email' ? 'active' : ''} onClick={() => setContactForm((prev) => ({ ...prev, contactMethod: 'email' }))}>
+              <button
+                type="button"
+                className={contactForm.contactMethod === 'email' ? 'active' : ''}
+                onClick={() => setContactForm((prev) => ({ ...prev, contactMethod: 'email' }))}
+              >
                 <FiMail /> Email
               </button>
-              <button type="button" className={contactForm.contactMethod === 'whatsapp' ? 'active' : ''} onClick={() => setContactForm((prev) => ({ ...prev, contactMethod: 'whatsapp' }))}>
+              <button
+                type="button"
+                className={contactForm.contactMethod === 'whatsapp' ? 'active' : ''}
+                onClick={() => setContactForm((prev) => ({ ...prev, contactMethod: 'whatsapp' }))}
+              >
                 Send via WhatsApp
               </button>
             </div>
 
             {contactForm.contactMethod === 'email' ? (
               <label className={errors.email ? 'invalid' : ''}>
-                <input type="email" value={contactForm.email} onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))} placeholder=" " />
+                <input
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(event) =>
+                    setContactForm((prev) => ({ ...prev, email: event.target.value }))
+                  }
+                  placeholder=" "
+                />
                 <span>Email Address</span>
               </label>
             ) : (
               <label className={errors.phone ? 'invalid' : ''}>
-                <input type="tel" value={contactForm.phone} onChange={(event) => setContactForm((prev) => ({ ...prev, phone: event.target.value }))} placeholder=" " />
+                <input
+                  type="tel"
+                  value={contactForm.phone}
+                  onChange={(event) =>
+                    setContactForm((prev) => ({ ...prev, phone: event.target.value }))
+                  }
+                  placeholder=" "
+                />
                 <span>WhatsApp Number</span>
               </label>
             )}
 
             <label className={errors.message ? 'invalid' : ''}>
-              <textarea rows="5" value={contactForm.message} onChange={(event) => setContactForm((prev) => ({ ...prev, message: event.target.value }))} placeholder=" " />
+              <textarea
+                rows="5"
+                value={contactForm.message}
+                onChange={(event) =>
+                  setContactForm((prev) => ({ ...prev, message: event.target.value }))
+                }
+                placeholder=" "
+              />
               <span>Message</span>
             </label>
 
-            <MagneticButton className="primary submit-btn" disabled={sending} type="submit">{sending ? 'Sending...' : 'Send Message'} <FiSend /></MagneticButton>
+            <MagneticButton className="primary submit-btn" disabled={sending} type="submit">
+              {sending ? 'Sending...' : 'Send Message'} <FiSend />
+            </MagneticButton>
             {submitMessage && <p className="form-message">{submitMessage}</p>}
 
             <div className="contact-links">
-              <a href="https://github.com/sahanafrancis24" target="_blank" rel="noreferrer"><FiGithub /> github.com/sahanafrancis24</a>
-              <a href="https://www.linkedin.com/in/sahana-f-0427492a9" target="_blank" rel="noreferrer"><FiLinkedin /> linkedin.com/in/sahana-f-0427492a9</a>
-              <a href="mailto:sahanafeminambbs@gmail.com"><FiMail /> sahanafeminambbs@gmail.com</a>
+              <a href="https://github.com/sahanafrancis24" target="_blank" rel="noreferrer">
+                <FiGithub /> github.com/sahanafrancis24
+              </a>
+              <a
+                href="https://www.linkedin.com/in/sahana-f-0427492a9"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FiLinkedin /> linkedin.com/in/sahana-f-0427492a9
+              </a>
+              <a href="mailto:sahanafeminambbs@gmail.com">
+                <FiMail /> sahanafeminambbs@gmail.com
+              </a>
             </div>
           </form>
         </motion.section>
       </main>
 
       <footer className="site-footer">
-        <p>Sahana F © 2026</p>
+        <p>Sahana F Â© 2026</p>
         <div className="footer-icons">
-          <a href="https://github.com/sahanafrancis24" target="_blank" rel="noreferrer" aria-label="GitHub profile"><FiGithub /></a>
-          <a href="https://www.linkedin.com/in/sahana-f-0427492a9" target="_blank" rel="noreferrer" aria-label="LinkedIn profile"><FiLinkedin /></a>
-          <a href="mailto:sahanafeminambbs@gmail.com" aria-label="Send email"><FiMail /></a>
+          <a
+            href="https://github.com/sahanafrancis24"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub profile"
+          >
+            <FiGithub />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/sahana-f-0427492a9"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn profile"
+          >
+            <FiLinkedin />
+          </a>
+          <a href="mailto:sahanafeminambbs@gmail.com" aria-label="Send email">
+            <FiMail />
+          </a>
         </div>
       </footer>
     </div>
