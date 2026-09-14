@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <!-- Fire Gradients -->
+    <linearGradient id="fireGrad" x1="0%" y1="100%" x2="30%" y2="0%">
+      <stop offset="0%" stop-color="#ff1a00" />
+      <stop offset="30%" stop-color="#ff5500" />
+      <stop offset="65%" stop-color="#ff9900" />
+      <stop offset="90%" stop-color="#ffe600" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#550000" />
+      <stop offset="40%" stop-color="#d41400" />
+      <stop offset="80%" stop-color="#ff6600" />
+      <stop offset="100%" stop-color="#ffcc00" />
+    </linearGradient>
+
+    <radialGradient id="bgGlow" cx="50%" cy="52%" r="50%">
+      <stop offset="0%" stop-color="#ff4400" stop-opacity="0.45" />
+      <stop offset="60%" stop-color="#ff1100" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#07070d" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark rounded icon background -->
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="#080811" />
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#bgGlow)" />
+  <rect x="4" y="4" width="120" height="120" rx="30" stroke="#ff4500" stroke-width="2" stroke-opacity="0.3" fill="none" />
+
+  <!-- Background rising flame tongue -->
+  <path d="M64 12 C74 26 82 40 76 56 C70 48 66 44 60 50 C54 56 56 68 50 76 C46 66 42 60 38 64 C34 68 36 78 32 86 C26 70 30 50 44 34 C54 22 60 16 64 12 Z" 
+        fill="url(#flameBack)" opacity="0.55" />
+
+  <!-- Sculpted Fire 'S' Letter -->
+  <g filter="url(#glow)">
+    <path d="M84 32
+             C76 25 65 24 55 26
+             C41 29 32 40 33 54
+             C34 66 44 72 55 76
+             L67 81
+             C77 85 83 91 82 99
+             C81 108 71 114 58 113
+             C46 112 37 104 35 95
+             C34 91 30 90 28 92
+             C26 94 27 99 29 103
+             C35 115 47 122 62 122
+             C78 122 91 111 92 95
+             C93 81 83 73 71 68
+             L59 63
+             C49 59 43 54 44 46
+             C45 38 53 32 64 32
+             C73 32 80 36 86 42
+             C88 44 92 44 93 42
+             C95 39 94 36 90 32
+             C88 30 86 31 84 32 Z" 
+          fill="url(#fireGrad)" />
+
+    <!-- Top flame flickers / tips -->
+    <path d="M64 12 C67 18 65 23 62 26 C66 22 69 18 68 11 C66 8 65 10 64 12 Z" fill="#ffffff" />
+    <path d="M88 28 C91 33 89 37 86 40 C89 36 93 33 91 27 C90 25 89 26 88 28 Z" fill="#ffe066" />
+    <circle cx="76" cy="18" r="2.5" fill="#ffe066" />
+    <circle cx="85" cy="24" r="1.8" fill="#ff7700" />
+    <circle cx="42" cy="28" r="2" fill="#ff4400" />
+  </g>
+</svg>
