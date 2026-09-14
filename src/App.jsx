@@ -80,6 +80,15 @@ const skillGroups = [
 
 const projects = [
   {
+    title: 'No-Page Website',
+    description:
+      'A continuous, living spatial digital experience featuring procedural WebGL particle environments, interactive spatial audio, and seamless zero-page navigation.',
+    stack: ['React', 'Three.js', 'WebGL', 'GLSL'],
+    github: 'https://github.com/sahanafrancis24/No-page-Website',
+    link: 'https://nopageweb.netlify.app/',
+    image: '/nopage.png',
+  },
+  {
     title: 'Ruffs Cafe',
     description:
       'Premium cafe brand website showcasing specialty coffee, pastries, and ambiance. Features elegant menu displays, location information, and online reservation system with smooth animations and responsive mobile experience.',
