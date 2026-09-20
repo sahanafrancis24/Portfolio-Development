@@ -80,6 +80,15 @@ const skillGroups = [
 
 const projects = [
   {
+    title: 'The Three Realms',
+    description:
+      'An immersive high-fantasy editorial WebGL experience showcasing three mystical realms with 3D interactive book guardians, rich lore, and atmospheric soundscapes.',
+    stack: ['React', 'Three.js', 'R3F', 'GSAP'],
+    github: 'https://github.com/sahanafrancis24/the-three-realms',
+    link: 'https://threerealms.netlify.app/',
+    image: '/three-realms.png',
+  },
+  {
     title: 'No-Page Website',
     description:
       'A continuous, living spatial digital experience featuring procedural WebGL particle environments, interactive spatial audio, and seamless zero-page navigation.',
