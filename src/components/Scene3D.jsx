@@ -28,24 +28,25 @@ function MultiverseDragon() {
     const scrollProgress = scrollY / maxScroll
 
     if (groupRef.current) {
-      // 1. Calculate Dimensional Lighting
-      // Find which segment we are in (0-1, 1-2, 2-3)
-      const segment = scrollProgress * 3
-      const index = Math.min(Math.floor(segment), 2)
-      const t = segment - index // 0 to 1 progress within the segment
+      // 1. Calculate Dimensional Lighting across 6 sections
+      const segment = scrollProgress * (colors.length - 1)
+      const index = Math.min(Math.floor(segment), colors.length - 2)
+      const t = segment - index
 
       if (mainLight.current && accentLight.current) {
         mainLight.current.color.lerpColors(colors[index].main, colors[index + 1].main, t)
         accentLight.current.color.lerpColors(colors[index].accent, colors[index + 1].accent, t)
       }
 
-      // 2. Flight Path Waypoints
-      // [x, y, z] and [rotX, rotY, rotZ]
+      // 2. Flight Path Waypoints across 6 sections:
+      // Home -> About -> Projects -> Skills -> GitHub -> Contact
       const waypoints = [
-        { pos: new THREE.Vector3(0, -1, 0), rot: new THREE.Euler(0, 0, 0) },         // Hero: Center
-        { pos: new THREE.Vector3(3.5, 0, -2), rot: new THREE.Euler(0, -0.6, 0.1) },    // About: Right side
-        { pos: new THREE.Vector3(-3.5, 0, -2), rot: new THREE.Euler(0, 0.6, -0.1) },   // Skills: Left side
-        { pos: new THREE.Vector3(3.5, -2, -1), rot: new THREE.Euler(0, -0.8, 0) }      // Projects: Right side, lower
+        { pos: new THREE.Vector3(0, -1, 0), rot: new THREE.Euler(0, 0, 0) },              // 01 Home: Center
+        { pos: new THREE.Vector3(3.6, 0, -2.2), rot: new THREE.Euler(0, -0.65, 0.08) },    // 02 About: Right side framing
+        { pos: new THREE.Vector3(0, -2.4, -3.8), rot: new THREE.Euler(-0.2, 0, 0) },       // 03 Projects: Deep background, low
+        { pos: new THREE.Vector3(-3.6, 0, -2.2), rot: new THREE.Euler(0, 0.65, -0.08) },   // 04 Skills: Left side framing
+        { pos: new THREE.Vector3(3.2, -1.2, -2.8), rot: new THREE.Euler(0, -0.5, 0.05) },   // 05 GitHub: Subdued right
+        { pos: new THREE.Vector3(2.6, -0.8, -1.2), rot: new THREE.Euler(0, -0.7, 0.1) }    // 06 Contact: Strong visual anchor
       ]
 
       // Interpolate between waypoints
