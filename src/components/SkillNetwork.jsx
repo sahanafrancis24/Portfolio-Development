@@ -1,31 +1,78 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { skillNodes } from '../data/skills'
+import {
+  FiCode,
+  FiServer,
+  FiDatabase,
+  FiTerminal,
+  FiCpu,
+  FiLayers,
+  FiActivity,
+  FiBox,
+  FiCheck,
+  FiCompass,
+} from 'react-icons/fi'
+
+const iconMap = {
+  FiCode: FiCode,
+  FiServer: FiServer,
+  FiDatabase: FiDatabase,
+  FiTerminal: FiTerminal,
+  FiCpu: FiCpu,
+  FiLayers: FiLayers,
+  FiActivity: FiActivity,
+  FiBox: FiBox,
+}
 
 export function SkillNetwork() {
-  const [selectedSkill, setSelectedSkill] = useState(skillNodes[0])
+  const [selectedSkill, setSelectedSkill] = useState(null)
 
   return (
     <section id="skills" className="ref-skills-stage">
+      {/* Background Media */}
+      <div className="section-media-bg">
+        <img
+          src="/skills.png"
+          alt="Skills Universe Background"
+          className="section-bg-image"
+          loading="lazy"
+        />
+        <div className="skills-vignette-overlay" />
+      </div>
+
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="04"
+        number="02"
         title="SKILLS"
-        subline={<>INTERACTIVE<br />SKILL UNIVERSE</>}
+        subline={<>A UNIVERSE<br />OF TOOLS</>}
         rightMeta={[
           'DISCIPLINES',
           'CONNECT',
           'IDEAS',
+          'WORLDS',
           '/',
+          'EXPLORE MY UNIVERSE',
         ]}
       />
 
-      <div className="skills-editorial-container">
-        {/* Left Title Block */}
-        <div className="skills-left-heading">
-          <h2 className="skills-big-word">SKILLS</h2>
-          <span className="skills-sub-word">A LIVING NETWORK</span>
+      <div className="skills-stage-layout">
+        {/* Left Column: Heading & Subtext */}
+        <div className="skills-left-narrative">
+          <span className="skills-kicker-label">EXPLORE MY UNIVERSE</span>
+          <h2 className="skills-stage-title">
+            A UNIVERSE <br />
+            <span className="text-magenta">OF TOOLS</span>
+          </h2>
+          <p className="skills-intro-paragraph">
+            Hover over any discipline in the constellation to explore its core stack, architectural
+            strengths, and connected project domains.
+          </p>
+          <div className="skills-hint-pill">
+            <span className="hint-pulse-dot" />
+            <span>8 Interactive Constellation Nodes</span>
+          </div>
         </div>
 
         {/* Center: Planetary Constellation Orbit */}
@@ -37,12 +84,11 @@ export function SkillNetwork() {
             <div className="orbit-ellipse ellipse-3" />
 
             {/* Connecting SVG Rays between nodes and center */}
-            <svg className="constellation-ray-svg" viewBox="-260 -180 520 360">
+            <svg className="constellation-ray-svg" viewBox="-280 -200 560 400">
               {skillNodes.map((node) => {
                 const rad = (node.angle * Math.PI) / 180
-                // Elliptical scale for cosmic perspective
                 const x = Math.cos(rad) * (node.distance * 1.05)
-                const y = Math.sin(rad) * (node.distance * 0.58)
+                const y = Math.sin(rad) * (node.distance * 0.6)
                 const isSelected = selectedSkill?.id === node.id
 
                 return (
@@ -52,9 +98,10 @@ export function SkillNetwork() {
                     y1={0}
                     x2={x}
                     y2={y}
-                    stroke={isSelected ? '#00f5ff' : 'rgba(120, 90, 255, 0.18)'}
-                    strokeWidth={isSelected ? 1.8 : 0.8}
-                    strokeDasharray={isSelected ? 'none' : '3 3'}
+                    stroke={isSelected ? node.color : 'rgba(140, 100, 255, 0.22)'}
+                    strokeWidth={isSelected ? 2 : 0.9}
+                    strokeDasharray={isSelected ? 'none' : '3 4'}
+                    style={{ transition: 'all 0.35s ease' }}
                   />
                 )
               })}
@@ -72,13 +119,14 @@ export function SkillNetwork() {
             {skillNodes.map((node) => {
               const rad = (node.angle * Math.PI) / 180
               const x = Math.cos(rad) * (node.distance * 1.05)
-              const y = Math.sin(rad) * (node.distance * 0.58)
+              const y = Math.sin(rad) * (node.distance * 0.6)
               const isSelected = selectedSkill?.id === node.id
+              const IconComponent = iconMap[node.icon] || FiCode
 
               return (
                 <div
                   key={node.id}
-                  className={`constellation-node-pill ${isSelected ? 'is-active' : ''}`}
+                  className={`constellation-node-wrapper ${isSelected ? 'is-active' : ''}`}
                   style={{
                     left: `calc(50% + ${x}px)`,
                     top: `calc(50% + ${y}px)`,
@@ -87,46 +135,128 @@ export function SkillNetwork() {
                   onClick={() => setSelectedSkill(node)}
                   role="button"
                   tabIndex={0}
-                  aria-label={node.name}
+                  aria-label={`${node.title} Skill Node`}
                 >
-                  <span
-                    className="node-pip"
-                    style={{ backgroundColor: isSelected ? '#00f5ff' : '#a288ff' }}
-                  />
-                  <span className="node-text">{node.name}</span>
+                  {/* Glowing Node Circle with Icon */}
+                  <div
+                    className="node-circle-disc"
+                    style={{
+                      borderColor: isSelected ? node.color : 'rgba(255, 255, 255, 0.25)',
+                      boxShadow: isSelected
+                        ? `0 0 24px ${node.color}, inset 0 0 12px ${node.color}`
+                        : '0 0 10px rgba(0, 0, 0, 0.5)',
+                    }}
+                  >
+                    <IconComponent
+                      size={18}
+                      color={isSelected ? '#ffffff' : node.color}
+                      className="node-disc-icon"
+                    />
+                  </div>
+
+                  {/* Sharp HTML Labels pinned firmly with the node */}
+                  <div className="node-text-plate">
+                    <span className="node-label-title" style={{ color: isSelected ? node.color : '#ffffff' }}>
+                      {node.title}
+                    </span>
+                    <span className="node-label-sub">{node.subtitle}</span>
+                  </div>
                 </div>
               )
             })}
           </div>
         </div>
 
-        {/* Right: Interactive Telemetry HUD Card */}
+        {/* Right: The Reference Explore Panel */}
         <div className="skills-hud-right">
-          <div className="hud-telemetry-box">
-            <div className="hud-top-prompt">
-              <span className="hud-prompt-label">HOVER A SKILL</span>
-              <span className="hud-prompt-sub">EXPLORE ITS WORLD</span>
-            </div>
+          <div className="hud-telemetry-box" style={{ borderColor: selectedSkill ? selectedSkill.color : 'rgba(140, 100, 255, 0.35)' }}>
+            <AnimatePresence mode="wait">
+              {selectedSkill ? (
+                <motion.div
+                  key={selectedSkill.id}
+                  className="hud-active-details"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="hud-category-pill" style={{ color: selectedSkill.color, borderColor: `${selectedSkill.color}55` }}>
+                    <span className="hud-pill-dot" style={{ backgroundColor: selectedSkill.color }} />
+                    <span>{selectedSkill.category}</span>
+                  </div>
 
-            <div className="hud-content-view">
-              <div className="hud-skill-heading">
-                <span className="hud-active-dot" />
-                <h3 className="hud-skill-title">{selectedSkill.name}</h3>
-              </div>
+                  <h3 className="hud-expanded-title" style={{ color: selectedSkill.color }}>
+                    {selectedSkill.title}
+                  </h3>
 
-              <p className="hud-skill-desc">{selectedSkill.summary}</p>
+                  <p className="hud-expanded-summary">{selectedSkill.summary}</p>
 
-              {/* Waveform graphic matching reference */}
-              <div className="hud-telemetry-graphic" aria-hidden="true">
-                <span className="bar bar-1" />
-                <span className="bar bar-2" />
-                <span className="bar bar-3" />
-                <span className="bar bar-4" />
-              </div>
-            </div>
+                  {/* Core Stack Badges */}
+                  <div className="hud-section-group">
+                    <span className="hud-group-label">CORE TOOLSET</span>
+                    <div className="hud-tech-badges">
+                      {selectedSkill.techs.map((t) => (
+                        <span key={t} className="tech-badge-item">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Strengths / Capabilities */}
+                  <div className="hud-section-group">
+                    <span className="hud-group-label">KEY CAPABILITIES</span>
+                    <ul className="hud-strengths-list">
+                      {selectedSkill.strengths.map((s) => (
+                        <li key={s} className="hud-strength-item">
+                          <FiCheck size={12} color={selectedSkill.color} />
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Connected Projects */}
+                  <div className="hud-section-group">
+                    <span className="hud-group-label">CONNECTED WORLDS</span>
+                    <div className="hud-projects-row">
+                      {selectedSkill.projects.map((p) => (
+                        <span key={p} className="hud-project-tag">
+                          {p}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="idle-explore"
+                  className="hud-idle-state"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <div className="idle-star-symbol">✦</div>
+                  <h3 className="idle-prompt-title">SELECT A SKILL</h3>
+                  <span className="idle-prompt-sub">TO EXPLORE</span>
+                  <p className="idle-prompt-desc">
+                    Hover or tap any of the 8 planetary nodes in the universe to reveal deep-dive
+                    engineering telemetry.
+                  </p>
+                  <div className="idle-hud-footer">
+                    <span>LEARN</span>
+                    <span className="sep">•</span>
+                    <span>BUILD</span>
+                    <span className="sep">•</span>
+                    <span>EXPLORE</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
     </section>
   )
 }
+

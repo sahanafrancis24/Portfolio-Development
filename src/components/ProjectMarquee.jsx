@@ -1,106 +1,82 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { ProjectCard } from './ProjectCard'
-import { FiArrowRight, FiArrowLeft } from 'react-icons/fi'
+import { FiArrowRight } from 'react-icons/fi'
 
 export function ProjectMarquee({ projects = [] }) {
-  const [row1Paused, setRow1Paused] = useState(false)
-  const [row2Paused, setRow2Paused] = useState(false)
-
-  // Split projects into 2 distinct rows
-  const { row1, row2 } = useMemo(() => {
-    const r1 = []
-    const r2 = []
-
-    projects.forEach((item, index) => {
-      if (index % 2 === 0) {
-        r1.push(item)
-      } else {
-        r2.push(item)
-      }
-    })
-
-    // Ensure at least 5 items per row by looping if needed
-    let full1 = [...r1]
-    while (full1.length < 5) full1 = [...full1, ...r1]
-
-    let full2 = [...r2]
-    while (full2.length < 5) full2 = [...full2, ...r2]
-
-    return { row1: full1, row2: full2 }
-  }, [projects])
+  const [isPaused, setIsPaused] = useState(false)
 
   return (
     <section id="projects" className="ref-projects-stage">
+      {/* Background Media: project.mp4 */}
+      <div className="section-media-bg">
+        <video autoPlay loop muted playsInline className="section-bg-video">
+          <source src="/project.mp4" type="video/mp4" />
+        </video>
+        <div className="projects-vignette-overlay" />
+      </div>
+
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="03"
         title="PROJECTS"
-        subline={<>AUTOMATIC SLIDING<br />DUAL MARQUEE</>}
+        subline={<>IDEAS<br />IN ACTION</>}
         rightMeta={[
-          'DRAGONS BUILD WORLDS TOO',
+          'SELECTED WORK',
+          'INTERACTIVE',
+          'CREATIVE TECH',
           '/',
-          'HOVER TO EXPLORE',
-          '/',
+          'REAL IMPACT',
         ]}
       />
 
-      {/* Section Header */}
-      <div className="projects-heading-row">
-        <h2 className="projects-title-white">SELECTED WORK</h2>
-        <span className="projects-title-sub">REAL PROJECTS. REAL IMPACT.</span>
-      </div>
-
-      {/* Dual Marquee Track Rows */}
-      <div className="dual-marquee-viewport">
-        {/* ROW 1 (Cyan Theme with Glowing Arrow Badge) */}
-        <div className="marquee-row-wrapper">
-          <div className="marquee-arrow-badge arrow-cyan" aria-hidden="true">
-            <FiArrowRight size={20} />
-          </div>
-
-          <div
-            className={`marquee-scroller scroller-ltr ${row1Paused ? 'is-paused' : ''}`}
-            onMouseEnter={() => setRow1Paused(true)}
-            onMouseLeave={() => setRow1Paused(false)}
-          >
-            <div className="scroller-track">
-              {row1.map((p, idx) => (
-                <ProjectCard key={`r1-1-${p.id || idx}`} project={p} theme="cyan" />
-              ))}
-            </div>
-            <div className="scroller-track" aria-hidden="true">
-              {row1.map((p, idx) => (
-                <ProjectCard key={`r1-2-${p.id || idx}`} project={p} theme="cyan" />
-              ))}
-            </div>
-          </div>
+      {/* Upper-Left Heading & Top-Right Action */}
+      <div className="projects-upper-header">
+        <div className="projects-upper-left">
+          <span className="projects-kicker-label">PROJECTS</span>
+          <h2 className="projects-display-title">
+            IDEAS <br />
+            <span className="text-magenta">IN ACTION</span>
+          </h2>
         </div>
 
-        {/* ROW 2 (Purple/Magenta Theme with Glowing Arrow Badge) */}
-        <div className="marquee-row-wrapper">
-          <div className="marquee-arrow-badge arrow-magenta" aria-hidden="true">
-            <FiArrowLeft size={20} />
-          </div>
-
-          <div
-            className={`marquee-scroller scroller-rtl ${row2Paused ? 'is-paused' : ''}`}
-            onMouseEnter={() => setRow2Paused(true)}
-            onMouseLeave={() => setRow2Paused(false)}
+        <div className="projects-upper-right">
+          <a
+            href="https://github.com/sahanafrancis24?tab=repositories"
+            target="_blank"
+            rel="noreferrer"
+            className="view-all-projects-pill"
           >
-            <div className="scroller-track">
-              {row2.map((p, idx) => (
-                <ProjectCard key={`r2-1-${p.id || idx}`} project={p} theme="magenta" />
-              ))}
-            </div>
-            <div className="scroller-track" aria-hidden="true">
-              {row2.map((p, idx) => (
-                <ProjectCard key={`r2-2-${p.id || idx}`} project={p} theme="magenta" />
-              ))}
-            </div>
+            <span>View All Projects</span>
+            <FiArrowRight size={14} />
+          </a>
+        </div>
+      </div>
+
+      {/* Lower Area: Project Cards Stream (kept clear of upper artwork) */}
+      <div className="projects-lower-deck">
+        <div
+          className={`projects-horizontal-track ${isPaused ? 'is-paused' : ''}`}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="track-sliding-inner">
+            {projects.map((p, idx) => (
+              <div key={`p1-${p.id || idx}`} className="project-slide-item">
+                <ProjectCard project={p} theme={idx % 2 === 0 ? 'cyan' : 'magenta'} />
+              </div>
+            ))}
+          </div>
+          <div className="track-sliding-inner" aria-hidden="true">
+            {projects.map((p, idx) => (
+              <div key={`p2-${p.id || idx}`} className="project-slide-item">
+                <ProjectCard project={p} theme={idx % 2 === 0 ? 'cyan' : 'magenta'} />
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </section>
   )
 }
+

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { FiGithub, FiLinkedin, FiMail, FiArrowRight, FiCheck } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -50,30 +51,40 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="ref-contact-stage">
+      {/* Background Media: contact.mp4 */}
+      <div className="section-media-bg">
+        <video autoPlay loop muted playsInline className="section-bg-video">
+          <source src="/contact.mp4" type="video/mp4" />
+        </video>
+        <div className="contact-vignette-overlay" />
+      </div>
+
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="06"
+        number="05"
         title="CONTACT"
-        subline={<>SAME UI<br />SLIGHTLY ENHANCED</>}
+        subline={<>IDEAS ALWAYS<br />FIND A WAY</>}
         rightMeta={[
           'IDEAS',
           'ALWAYS',
           'FIND',
           'A WAY',
           '/',
+          'CONNECT',
         ]}
       />
 
-      <div className="contact-editorial-grid">
-        {/* Left Column: Manifesto & Social Pills */}
-        <div className="contact-manifesto-column">
-          <span className="contact-pre-kicker">HAVE AN IDEA?</span>
+      <div className="contact-artdirected-layout">
+        {/* Left Column: Heading, Subtitle, Social Links, and Form */}
+        <div className="contact-left-col">
+          <span className="contact-pre-kicker">GET IN TOUCH</span>
           <h2 className="contact-bold-heading">
-            LET&apos;S BUILD <br />
-            SOMETHING <br />
-            UNUSUAL.
+            LET&apos;S CREATE <br />
+            <span className="text-magenta">SOMETHING UNUSUAL.</span>
           </h2>
+          <p className="contact-subline-mantra">Ideas Always Find a Way</p>
 
+          {/* Social Icons Strip */}
           <div className="contact-social-pill-row">
             <a
               href="https://github.com/sahanafrancis24"
@@ -105,11 +116,20 @@ export function ContactSection() {
               <FiMail size={14} />
               <span>Email</span>
             </a>
-          </div>
-        </div>
 
-        {/* Center/Right: Minimal Futuristic Terminal Form */}
-        <div className="contact-form-column">
+            <a
+              href="https://wa.me/919940866034"
+              target="_blank"
+              rel="noreferrer"
+              className="social-ref-pill whatsapp-pill"
+              aria-label="Chat on WhatsApp"
+            >
+              <FaWhatsapp size={14} />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+
+          {/* Form */}
           <form className="contact-minimal-terminal" onSubmit={handleSubmit} noValidate>
             <div className="field-row">
               <input
@@ -157,7 +177,7 @@ export function ContactSection() {
             >
               {status === 'idle' && (
                 <>
-                  <span>SEND TRANSMISSION</span>
+                  <span>SEND MESSAGE</span>
                   <span className="pill-arrow-circle">
                     <FiArrowRight size={13} />
                   </span>
@@ -184,7 +204,13 @@ export function ContactSection() {
             </button>
           </form>
         </div>
+
+        {/* Right Area: Intentionally 100% clear so the cyber dragon is prominent */}
+        <div className="contact-right-col" aria-hidden="true">
+          {/* Open space framing the dragon */}
+        </div>
       </div>
     </section>
   )
 }
+

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { FiGithub, FiStar, FiGitBranch, FiArrowRight } from 'react-icons/fi'
@@ -48,9 +49,20 @@ export function GithubLiveFeed() {
 
   return (
     <section id="github" className="ref-github-stage">
+      {/* Background Media: github.png */}
+      <div className="section-media-bg">
+        <img
+          src="/github.png"
+          alt="GitHub Cosmic Landscape"
+          className="section-bg-image"
+          loading="lazy"
+        />
+        <div className="github-vignette-overlay" />
+      </div>
+
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="05"
+        number="04"
         title="GITHUB"
         subline={<>LIVE DATA<br />AUTOMATICALLY UPDATES</>}
         rightMeta={[
@@ -59,30 +71,40 @@ export function GithubLiveFeed() {
           'IMPROVE',
           'REPEAT',
           '/',
+          'REAL API METRICS',
         ]}
       />
 
       <div className="github-stage-grid">
-        {/* Left Title */}
+        {/* Left Title in clear negative space */}
         <div className="github-left-title-col">
-          <h2 className="github-big-word">GITHUB</h2>
-          <span className="github-sub-word">LIVE FEED</span>
+          <span className="github-pre-label">VERSION CONTROL</span>
+          <h2 className="github-big-word">
+            GITHUB <br />
+            <span className="text-magenta">LIVE FEED</span>
+          </h2>
+          <p className="github-desc-p">
+            Real-time feed streaming dynamically from the GitHub API. No static numbers.
+          </p>
+          <a
+            href="https://github.com/sahanafrancis24"
+            target="_blank"
+            rel="noreferrer"
+            className="view-github-pill"
+            aria-label="View on GitHub"
+          >
+            <span>Explore Repositories</span>
+            <FiArrowRight size={13} />
+          </a>
         </div>
 
         {/* Right Repositories Stream */}
         <div className="github-right-stream-col">
           <div className="github-stream-topbar">
-            <span className="stream-heading">Recent Repositories</span>
-            <a
-              href="https://github.com/sahanafrancis24"
-              target="_blank"
-              rel="noreferrer"
-              className="view-github-pill"
-              aria-label="View on GitHub"
-            >
-              <span>View on GitHub</span>
-              <FiArrowRight size={13} />
-            </a>
+            <span className="stream-heading">Latest Transmissions</span>
+            <span className="stream-sync-badge">
+              <span className="live-dot" /> LIVE SYNC
+            </span>
           </div>
 
           {/* Cards Row matching reference */}
@@ -131,3 +153,4 @@ export function GithubLiveFeed() {
     </section>
   )
 }
+

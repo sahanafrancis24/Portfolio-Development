@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Canvas } from '@react-three/fiber'
-import { Scene3D } from './components/Scene3D'
 import { Navbar } from './components/Navbar'
 import { CustomCursor } from './components/CustomCursor'
 import { ScrollProgress } from './components/ScrollProgress'
 import { Hero } from './components/Hero'
 import { AboutExperience } from './components/AboutExperience'
-import { ProjectMarquee } from './components/ProjectMarquee'
 import { SkillNetwork } from './components/SkillNetwork'
+import { ProjectMarquee } from './components/ProjectMarquee'
 import { GithubLiveFeed } from './components/GithubLiveFeed'
 import { ContactSection } from './components/ContactSection'
 import { initialProjects } from './data/projects'
@@ -92,24 +90,6 @@ function App() {
       {/* Ultra-Thin Top Scroll Progress Line */}
       <ScrollProgress />
 
-      {/* Fixed Futuristic Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="background-video"
-      >
-        <source src="/background.mp4" type="video/mp4" />
-      </video>
-
-      {/* Persistent 3D Multiverse Dragon Scene */}
-      <div className="canvas-container">
-        <Canvas eventSource={document.body}>
-          <Scene3D />
-        </Canvas>
-      </div>
-
       {/* Reference Floating Navbar */}
       <Navbar
         navItems={navItems}
@@ -122,8 +102,8 @@ function App() {
       <main className="ref-main-stream">
         <Hero onNavClick={handleNavClick} />
         <AboutExperience />
-        <ProjectMarquee projects={projects} />
         <SkillNetwork />
+        <ProjectMarquee projects={projects} />
         <GithubLiveFeed />
         <ContactSection />
       </main>
@@ -138,3 +118,4 @@ function App() {
 }
 
 export default App
+
