@@ -1,69 +1,33 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { FiGithub, FiExternalLink } from 'react-icons/fi'
+import { FiExternalLink, FiGithub } from 'react-icons/fi'
 
-export function ProjectCard({ project }) {
-  const [tilt, setTilt] = useState({ rx: 0, ry: 0 })
-
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const px = (e.clientX - rect.left) / rect.width
-    const py = (e.clientY - rect.top) / rect.height
-    // Max 3-5 degrees tilt as specified
-    const rx = (0.5 - py) * 6
-    const ry = (px - 0.5) * 6
-    setTilt({ rx, ry })
-  }
-
-  const handleMouseLeave = () => {
-    setTilt({ rx: 0, ry: 0 })
-  }
-
+export function ProjectCard({ project, theme = 'cyan' }) {
   return (
-    <motion.div
-      className="marquee-project-card glass-panel"
-      data-cursor="view"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      animate={{
-        rotateX: tilt.rx,
-        rotateY: tilt.ry,
-      }}
-      transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-      tabIndex={0}
-      role="article"
-      aria-label={project.title}
-    >
-      {/* Thumbnail Container */}
-      <div className="card-media-wrapper">
+    <div className={`ref-project-card card-theme-${theme}`}>
+      {/* Visual Thumbnail */}
+      <div className="card-thumb-frame">
         <img
           src={project.image || '/nopage.png'}
           alt={project.title}
           loading="lazy"
-          className="card-media-img"
+          className="card-thumb-image"
           onError={(e) => {
-            // Fallback safety so a broken image never appears
-            if (e.target.src !== '/nopage.png') {
-              e.target.src = '/nopage.png'
-            }
+            if (e.target.src !== '/nopage.png') e.target.src = '/nopage.png'
           }}
         />
-        <div className="card-media-overlay" />
+        <div className="card-thumb-sheen" />
 
-        {/* Floating Quick Action Overlay */}
-        <div className="card-actions-quick">
+        {/* Action Overlay */}
+        <div className="card-hover-actions">
           {project.link && (
             <a
               href={project.link}
               target="_blank"
               rel="noreferrer"
-              className="quick-action-pill live-pill"
-              onClick={(e) => e.stopPropagation()}
-              data-cursor="view"
+              className="action-pill live-pill"
               aria-label={`Live Demo of ${project.title}`}
             >
               <span>LIVE</span>
-              <FiExternalLink size={12} />
+              <FiExternalLink size={11} />
             </a>
           )}
           {project.github && (
@@ -71,35 +35,21 @@ export function ProjectCard({ project }) {
               href={project.github}
               target="_blank"
               rel="noreferrer"
-              className="quick-action-pill github-pill"
-              onClick={(e) => e.stopPropagation()}
-              data-cursor="source"
-              aria-label={`GitHub Repository of ${project.title}`}
+              className="action-pill source-pill"
+              aria-label={`Source code of ${project.title}`}
             >
               <span>SOURCE</span>
-              <FiGithub size={12} />
+              <FiGithub size={11} />
             </a>
           )}
         </div>
       </div>
 
-      {/* Project Metadata */}
-      <div className="card-body">
-        <div className="card-header-row">
-          <h3 className="card-title">{project.title}</h3>
-        </div>
-
-        <p className="card-category">{project.category}</p>
-
-        {/* Micro Tech Tags */}
-        <div className="card-tech-row">
-          {(project.stack || []).slice(0, 3).map((tech) => (
-            <span key={tech} className="micro-tag">
-              #{tech.toLowerCase().replace(/\s+/g, '')}
-            </span>
-          ))}
-        </div>
+      {/* Typography Footer */}
+      <div className="card-caption-bar">
+        <h3 className="caption-title">{project.title}</h3>
+        <p className="caption-category">{project.category || 'Creative Web'}</p>
       </div>
-    </motion.div>
+    </div>
   )
 }

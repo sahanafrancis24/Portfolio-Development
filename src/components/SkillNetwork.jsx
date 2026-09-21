@@ -1,169 +1,130 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { SectionLabel } from './SectionLabel'
-import { centralNode, skillNodes } from '../data/skills'
-import { FiCheckCircle } from 'react-icons/fi'
+import { SectionHeaderMeta } from './SectionHeaderMeta'
+import { skillNodes } from '../data/skills'
 
 export function SkillNetwork() {
-  const [activeSkill, setActiveSkill] = useState(skillNodes[0])
+  const [selectedSkill, setSelectedSkill] = useState(skillNodes[0])
 
   return (
-    <section id="skills" className="skill-constellation-section">
-      <SectionLabel
+    <section id="skills" className="ref-skills-stage">
+      {/* Top Editorial Metadata */}
+      <SectionHeaderMeta
         number="04"
-        label="SKILLS"
-        subtitle="LIVING TECHNOLOGICAL CONSTELLATION // NEURAL GRAPH"
+        title="SKILLS"
+        subline={<>INTERACTIVE<br />SKILL UNIVERSE</>}
+        rightMeta={[
+          'DISCIPLINES',
+          'CONNECT',
+          'IDEAS',
+          '/',
+        ]}
       />
 
-      <div className="constellation-grid-layout">
-        {/* Left / Center: Interactive Constellation Graph */}
-        <div className="constellation-viewport">
-          <div className="constellation-orbit-stage">
-            {/* Concentric Orbital Rings */}
-            <div className="orbit-ring orbit-ring-inner" />
-            <div className="orbit-ring orbit-ring-mid" />
-            <div className="orbit-ring orbit-ring-outer" />
+      <div className="skills-editorial-container">
+        {/* Left Title Block */}
+        <div className="skills-left-heading">
+          <h2 className="skills-big-word">SKILLS</h2>
+          <span className="skills-sub-word">A LIVING NETWORK</span>
+        </div>
 
-            {/* SVG Connecting Vectors */}
-            <svg className="constellation-svg" viewBox="-280 -280 560 560">
-              <defs>
-                <linearGradient id="coreRayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00f5ff" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#7b2ff7" stopOpacity="0.1" />
-                </linearGradient>
-              </defs>
+        {/* Center: Planetary Constellation Orbit */}
+        <div className="skills-constellation-center">
+          <div className="constellation-canvas-box">
+            {/* Concentric Elliptical Orbital Rings */}
+            <div className="orbit-ellipse ellipse-1" />
+            <div className="orbit-ellipse ellipse-2" />
+            <div className="orbit-ellipse ellipse-3" />
 
+            {/* Connecting SVG Rays between nodes and center */}
+            <svg className="constellation-ray-svg" viewBox="-260 -180 520 360">
               {skillNodes.map((node) => {
                 const rad = (node.angle * Math.PI) / 180
-                const x = Math.cos(rad) * node.distance
-                const y = Math.sin(rad) * node.distance
-                const isFocused = activeSkill?.id === node.id
+                // Elliptical scale for cosmic perspective
+                const x = Math.cos(rad) * (node.distance * 1.05)
+                const y = Math.sin(rad) * (node.distance * 0.58)
+                const isSelected = selectedSkill?.id === node.id
 
                 return (
-                  <g key={`line-${node.id}`}>
-                    <line
-                      x1={0}
-                      y1={0}
-                      x2={x}
-                      y2={y}
-                      stroke={isFocused ? node.color : 'rgba(255, 255, 255, 0.12)'}
-                      strokeWidth={isFocused ? 2 : 1}
-                      strokeDasharray={isFocused ? 'none' : '4 4'}
-                      className="constellation-ray"
-                    />
-                    {isFocused && (
-                      <circle cx={x * 0.5} cy={y * 0.5} r={2.5} fill={node.color}>
-                        <animate
-                          attributeName="opacity"
-                          values="0.2;1;0.2"
-                          dur="1.8s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                    )}
-                  </g>
+                  <line
+                    key={`ray-${node.id}`}
+                    x1={0}
+                    y1={0}
+                    x2={x}
+                    y2={y}
+                    stroke={isSelected ? '#00f5ff' : 'rgba(120, 90, 255, 0.18)'}
+                    strokeWidth={isSelected ? 1.8 : 0.8}
+                    strokeDasharray={isSelected ? 'none' : '3 3'}
+                  />
                 )
               })}
             </svg>
 
-            {/* Central Node 'S' */}
-            <motion.div
-              className="central-core-node"
-              animate={{ scale: [1, 1.04, 1] }}
-              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-              onClick={() => setActiveSkill(null)}
-              tabIndex={0}
-              role="button"
-              aria-label="Core Hub"
-            >
-              <div className="core-glow-aura" />
-              <div className="core-symbol-disc">
-                <span className="core-s-letter">{centralNode.label}</span>
+            {/* Central Core S Sphere */}
+            <div className="central-galaxy-core" aria-hidden="true">
+              <div className="core-corona-glow" />
+              <div className="core-orb-disc">
+                <span className="core-s-symbol">S</span>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Orbiting Satellite Nodes */}
+            {/* Spatially Stable Satellite Nodes (NEVER move or fly into S) */}
             {skillNodes.map((node) => {
               const rad = (node.angle * Math.PI) / 180
-              const x = Math.cos(rad) * node.distance
-              const y = Math.sin(rad) * node.distance
-              const isSelected = activeSkill?.id === node.id
+              const x = Math.cos(rad) * (node.distance * 1.05)
+              const y = Math.sin(rad) * (node.distance * 0.58)
+              const isSelected = selectedSkill?.id === node.id
 
               return (
-                <motion.div
+                <div
                   key={node.id}
-                  className={`skill-satellite-node ${isSelected ? 'is-selected' : ''}`}
+                  className={`constellation-node-pill ${isSelected ? 'is-active' : ''}`}
                   style={{
-                    transform: `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0)`,
+                    left: `calc(50% + ${x}px)`,
+                    top: `calc(50% + ${y}px)`,
                   }}
-                  onMouseEnter={() => setActiveSkill(node)}
-                  onClick={() => setActiveSkill(node)}
-                  tabIndex={0}
+                  onMouseEnter={() => setSelectedSkill(node)}
+                  onClick={() => setSelectedSkill(node)}
                   role="button"
+                  tabIndex={0}
                   aria-label={node.name}
-                  whileHover={{ scale: 1.15 }}
                 >
-                  <div
-                    className="satellite-orb"
-                    style={{
-                      borderColor: isSelected ? node.color : 'rgba(255, 255, 255, 0.22)',
-                      boxShadow: isSelected ? `0 0 20px ${node.color}` : 'none',
-                    }}
-                  >
-                    <div
-                      className="orb-pip"
-                      style={{ backgroundColor: isSelected ? node.color : '#ffffff' }}
-                    />
-                  </div>
-                  <span className="satellite-label">{node.name}</span>
-                </motion.div>
+                  <span
+                    className="node-pip"
+                    style={{ backgroundColor: isSelected ? '#00f5ff' : '#a288ff' }}
+                  />
+                  <span className="node-text">{node.name}</span>
+                </div>
               )
             })}
           </div>
         </div>
 
-        {/* Right: Contextual Intelligence Panel */}
-        <div className="constellation-sidebar">
-          {activeSkill ? (
-            <motion.div
-              key={activeSkill.id}
-              className="skill-intel-panel glass-panel"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="intel-badge-row">
-                <span
-                  className="intel-cat-tag"
-                  style={{ borderColor: activeSkill.color, color: activeSkill.color }}
-                >
-                  {activeSkill.category}
-                </span>
-              </div>
-
-              <h3 className="intel-title" style={{ color: activeSkill.color }}>
-                {activeSkill.name}
-              </h3>
-
-              <p className="intel-summary">{activeSkill.summary}</p>
-
-              <div className="intel-details-list">
-                <h4 className="details-header">KEY CAPABILITIES & WORKFLOWS</h4>
-                {activeSkill.details.map((detail, idx) => (
-                  <div key={idx} className="detail-item">
-                    <FiCheckCircle size={14} color={activeSkill.color} />
-                    <span>{detail}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ) : (
-            <div className="skill-intel-panel glass-panel empty-state">
-              <h3 className="intel-title">{centralNode.title}</h3>
-              <p className="intel-summary">{centralNode.description}</p>
-              <p className="hint-text">Hover or click any orbital node to inspect domain telemetry.</p>
+        {/* Right: Interactive Telemetry HUD Card */}
+        <div className="skills-hud-right">
+          <div className="hud-telemetry-box">
+            <div className="hud-top-prompt">
+              <span className="hud-prompt-label">HOVER A SKILL</span>
+              <span className="hud-prompt-sub">EXPLORE ITS WORLD</span>
             </div>
-          )}
+
+            <div className="hud-content-view">
+              <div className="hud-skill-heading">
+                <span className="hud-active-dot" />
+                <h3 className="hud-skill-title">{selectedSkill.name}</h3>
+              </div>
+
+              <p className="hud-skill-desc">{selectedSkill.summary}</p>
+
+              {/* Waveform graphic matching reference */}
+              <div className="hud-telemetry-graphic" aria-hidden="true">
+                <span className="bar bar-1" />
+                <span className="bar bar-2" />
+                <span className="bar bar-3" />
+                <span className="bar bar-4" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

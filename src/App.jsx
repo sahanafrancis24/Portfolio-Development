@@ -13,14 +13,13 @@ import { GithubLiveFeed } from './components/GithubLiveFeed'
 import { ContactSection } from './components/ContactSection'
 import { initialProjects } from './data/projects'
 import { getPortfolioProjects } from './services/githubProjects'
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 import './App.css'
 
 const navItems = [
   { label: 'Home', id: 'home' },
   { label: 'About', id: 'about' },
-  { label: 'Projects', id: 'projects' },
   { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
   { label: 'GitHub', id: 'github' },
   { label: 'Contact', id: 'contact' },
 ]
@@ -30,9 +29,9 @@ function App() {
   const [projects, setProjects] = useState(initialProjects)
   const [showLoader, setShowLoader] = useState(true)
 
-  // 1. Initial Page Entrance Loader
+  // 1. Initial Entrance Fade
   useEffect(() => {
-    const timer = setTimeout(() => setShowLoader(false), 900)
+    const timer = setTimeout(() => setShowLoader(false), 800)
     return () => clearTimeout(timer)
   }, [])
 
@@ -77,7 +76,7 @@ function App() {
             className="page-loader"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7 }}
           >
             <div className="loader-core-content">
               <span className="loader-name">SAHANA F</span>
@@ -111,7 +110,7 @@ function App() {
         </Canvas>
       </div>
 
-      {/* Floating Glass Navigation */}
+      {/* Reference Floating Navbar */}
       <Navbar
         navItems={navItems}
         activeSection={activeSection}
@@ -120,7 +119,7 @@ function App() {
       />
 
       {/* Main Experience Stream */}
-      <main>
+      <main className="ref-main-stream">
         <Hero onNavClick={handleNavClick} />
         <AboutExperience />
         <ProjectMarquee projects={projects} />
@@ -129,38 +128,10 @@ function App() {
         <ContactSection />
       </main>
 
-      {/* Minimal Cinematic Footer */}
-      <footer className="site-footer">
-        <div className="footer-content-wrap">
-          <p className="footer-copy">
-            SAHANA F <span className="footer-sep">•</span> 2026 CREATIVE PORTFOLIO
-          </p>
-          <div className="footer-social-links">
-            <a
-              href="https://github.com/sahanafrancis24"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub Profile"
-              data-cursor="source"
-            >
-              <FiGithub size={16} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/sahana-f-0427492a9"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn Profile"
-            >
-              <FiLinkedin size={16} />
-            </a>
-            <a
-              href="mailto:sahanafeminambbs@gmail.com"
-              aria-label="Send direct email"
-            >
-              <FiMail size={16} />
-            </a>
-          </div>
-        </div>
+      {/* Bottom Footer matching Reference */}
+      <footer className="ref-footer-strip">
+        <span className="footer-brand-year">Sahana F — 2026</span>
+        <span className="footer-tagline">SCIENCE MEETS CREATIVITY</span>
       </footer>
     </div>
   )

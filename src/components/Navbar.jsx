@@ -21,33 +21,34 @@ export function Navbar({ navItems, activeSection, onNavClick, onBrandClick }) {
 
   return (
     <>
-      <header className={`site-nav ${scrolled ? 'nav-scrolled' : ''}`}>
+      <header className={`ref-navbar-wrap ${scrolled ? 'is-scrolled' : ''}`}>
+        {/* Left: Glowing Brand Pill */}
         <button
-          className="brand"
+          className="nav-brand-pill"
           onClick={onBrandClick}
-          aria-label="Sahana F Portfolio Home"
+          aria-label="Sahana F Home"
         >
-          <span className="brand-accent">S</span>ahana F
+          <span>Sahana F</span>
         </button>
 
-        {/* Desktop Navigation */}
-        <nav className="desktop-nav" aria-label="Main Navigation">
+        {/* Right: Capsule Menu */}
+        <nav className="nav-capsule" aria-label="Main Navigation">
           {navItems.map((item) => {
             const isActive = activeSection === item.id
             return (
               <button
                 key={item.id}
-                className={`nav-link ${isActive ? 'active' : ''}`}
+                className={`capsule-item ${isActive ? 'active' : ''}`}
                 onClick={() => handleItemClick(item.id)}
               >
                 {isActive && (
                   <motion.span
-                    layoutId="activePill"
-                    className="active-pill-bg"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    layoutId="activeNavPill"
+                    className="capsule-active-indicator"
+                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                   />
                 )}
-                <span className="nav-text">{item.label}</span>
+                <span className="capsule-label">{item.label}</span>
               </button>
             )
           })}
@@ -55,11 +56,11 @@ export function Navbar({ navItems, activeSection, onNavClick, onBrandClick }) {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="mobile-toggle"
+          className="nav-mobile-btn"
           onClick={() => setMobileOpen((prev) => !prev)}
-          aria-label={mobileOpen ? 'Close Menu' : 'Open Menu'}
+          aria-label={mobileOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
         >
-          {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+          {mobileOpen ? <FiX size={20} /> : <FiMenu size={20} />}
         </button>
       </header>
 
@@ -67,23 +68,21 @@ export function Navbar({ navItems, activeSection, onNavClick, onBrandClick }) {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="mobile-nav-overlay"
-            initial={{ opacity: 0, y: -20 }}
+            className="mobile-capsule-drawer"
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.22 }}
           >
-            <div className="mobile-nav-content">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  className={`mobile-nav-item ${activeSection === item.id ? 'active' : ''}`}
-                  onClick={() => handleItemClick(item.id)}
-                >
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </div>
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                className={`mobile-drawer-link ${activeSection === item.id ? 'active' : ''}`}
+                onClick={() => handleItemClick(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>

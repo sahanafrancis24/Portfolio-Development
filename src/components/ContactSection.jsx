@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { SectionLabel } from './SectionLabel'
-import { FiMail, FiPhone, FiGithub, FiLinkedin, FiSend, FiCheck, FiArrowRight } from 'react-icons/fi'
+import { SectionHeaderMeta } from './SectionHeaderMeta'
+import { FiGithub, FiLinkedin, FiMail, FiArrowRight, FiCheck } from 'react-icons/fi'
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
     message: '',
-    method: 'email', // 'email' | 'whatsapp'
   })
   const [status, setStatus] = useState('idle') // 'idle' | 'transmitting' | 'sent' | 'error'
   const [errorMessage, setErrorMessage] = useState('')
@@ -17,41 +14,12 @@ export function ContactSection() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!formData.name.trim()) {
-      setErrorMessage('Please enter your name.')
-      return
-    }
-
-    if (formData.method === 'email') {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        setErrorMessage('Please enter a valid email address.')
-        return
-      }
-    } else {
-      if (!formData.phone.replace(/\D/g, '').length) {
-        setErrorMessage('Please enter a valid WhatsApp number.')
-        return
-      }
-    }
-
-    if (formData.message.trim().length < 10) {
-      setErrorMessage('Please enter a message of at least 10 characters.')
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setErrorMessage('Please fill in all fields before sending transmission.')
       return
     }
 
     setErrorMessage('')
-
-    // WhatsApp flow
-    if (formData.method === 'whatsapp') {
-      const phone = '919363065542'
-      const text = `Hi Sahana, my name is ${formData.name}. ${formData.message}`
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank')
-      setStatus('sent')
-      setTimeout(() => setStatus('idle'), 4000)
-      return
-    }
-
-    // Formspree flow
     setStatus('transmitting')
 
     try {
@@ -61,230 +29,156 @@ export function ContactSection() {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        }),
+        body: JSON.stringify(formData),
       })
 
       if (response.ok) {
         setStatus('sent')
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-          method: 'email',
-        })
-        setTimeout(() => setStatus('idle'), 4500)
+        setFormData({ name: '', email: '', message: '' })
+        setTimeout(() => setStatus('idle'), 4000)
       } else {
         setStatus('error')
-        setErrorMessage('Transmission failed. Please try again or reach out via LinkedIn/Email.')
-        setTimeout(() => setStatus('idle'), 4000)
+        setErrorMessage('Transmission failed. Please reach out via Email/LinkedIn.')
+        setTimeout(() => setStatus('idle'), 3500)
       }
     } catch {
       setStatus('error')
-      setErrorMessage('Network transmission error. Please check your connection.')
-      setTimeout(() => setStatus('idle'), 4000)
+      setErrorMessage('Network error. Please try again.')
+      setTimeout(() => setStatus('idle'), 3500)
     }
   }
 
   return (
-    <section id="contact" className="contact-terminal-section">
-      <SectionLabel
+    <section id="contact" className="ref-contact-stage">
+      {/* Top Editorial Metadata */}
+      <SectionHeaderMeta
         number="06"
-        label="CONTACT"
-        subtitle="COMMUNICATION TERMINAL // DIRECT TRANSMISSION"
+        title="CONTACT"
+        subline={<>SAME UI<br />SLIGHTLY ENHANCED</>}
+        rightMeta={[
+          'IDEAS',
+          'ALWAYS',
+          'FIND',
+          'A WAY',
+          '/',
+        ]}
       />
 
-      <div className="contact-terminal-grid">
-        {/* Left: Atmospheric Manifesto & Channels */}
-        <div className="contact-manifesto-col">
-          <h2 className="contact-big-title">
-            HAVE AN IDEA? <br />
-            <span className="title-highlight">LET&apos;S BUILD SOMETHING UNUSUAL.</span>
+      <div className="contact-editorial-grid">
+        {/* Left Column: Manifesto & Social Pills */}
+        <div className="contact-manifesto-column">
+          <span className="contact-pre-kicker">HAVE AN IDEA?</span>
+          <h2 className="contact-bold-heading">
+            LET&apos;S BUILD <br />
+            SOMETHING <br />
+            UNUSUAL.
           </h2>
 
-          <p className="contact-lede">
-            Whether you are looking to architect an interactive 3D web experience, develop a full-stack digital product, or explore computational bioinformatics workflows — I am ready to collaborate.
-          </p>
-
-          <div className="contact-direct-channels">
+          <div className="contact-social-pill-row">
             <a
-              href="mailto:sahanafeminambbs@gmail.com"
-              className="direct-channel-link"
-              aria-label="Send direct email"
+              href="https://github.com/sahanafrancis24"
+              target="_blank"
+              rel="noreferrer"
+              className="social-ref-pill"
+              aria-label="GitHub Profile"
             >
-              <div className="channel-icon-disc">
-                <FiMail size={16} />
-              </div>
-              <div className="channel-info">
-                <span className="channel-type">DIRECT EMAIL</span>
-                <span className="channel-val">sahanafeminambbs@gmail.com</span>
-              </div>
+              <FiGithub size={14} />
+              <span>GitHub</span>
             </a>
 
             <a
               href="https://www.linkedin.com/in/sahana-f-0427492a9"
               target="_blank"
               rel="noreferrer"
-              className="direct-channel-link"
-              aria-label="Open LinkedIn Profile"
+              className="social-ref-pill"
+              aria-label="LinkedIn Profile"
             >
-              <div className="channel-icon-disc">
-                <FiLinkedin size={16} />
-              </div>
-              <div className="channel-info">
-                <span className="channel-type">LINKEDIN</span>
-                <span className="channel-val">linkedin.com/in/sahana-f-0427492a9</span>
-              </div>
+              <FiLinkedin size={14} />
+              <span>LinkedIn</span>
             </a>
 
             <a
-              href="https://github.com/sahanafrancis24"
-              target="_blank"
-              rel="noreferrer"
-              className="direct-channel-link"
-              data-cursor="source"
-              aria-label="Open GitHub Profile"
+              href="mailto:sahanafeminambbs@gmail.com"
+              className="social-ref-pill"
+              aria-label="Send direct email"
             >
-              <div className="channel-icon-disc">
-                <FiGithub size={16} />
-              </div>
-              <div className="channel-info">
-                <span className="channel-type">GITHUB CODEBASE</span>
-                <span className="channel-val">github.com/sahanafrancis24</span>
-              </div>
+              <FiMail size={14} />
+              <span>Email</span>
             </a>
           </div>
         </div>
 
-        {/* Right: Glass Terminal Form */}
-        <div className="contact-form-col">
-          <form className="transmission-terminal glass-panel" onSubmit={handleSubmit} noValidate>
-            <div className="terminal-topbar">
-              <div className="terminal-dots">
-                <span className="t-dot red" />
-                <span className="t-dot yellow" />
-                <span className="t-dot green" />
-              </div>
-              <span className="terminal-id-tag">TX-TERMINAL // v2.6</span>
-            </div>
-
-            {/* Mode Switcher: Email or WhatsApp */}
-            <div className="transmission-mode-switch">
-              <button
-                type="button"
-                className={`mode-tab-btn ${formData.method === 'email' ? 'active' : ''}`}
-                onClick={() => setFormData((p) => ({ ...p, method: 'email' }))}
-              >
-                <FiMail size={13} />
-                <span>EMAIL DISPATCH</span>
-              </button>
-              <button
-                type="button"
-                className={`mode-tab-btn ${formData.method === 'whatsapp' ? 'active' : ''}`}
-                onClick={() => setFormData((p) => ({ ...p, method: 'whatsapp' }))}
-              >
-                <FiPhone size={13} />
-                <span>WHATSAPP INSTANT</span>
-              </button>
-            </div>
-
-            {/* Input: Name */}
-            <div className="terminal-input-group">
-              <label htmlFor="tx-name" className="terminal-label">IDENTIFIER / NAME</label>
+        {/* Center/Right: Minimal Futuristic Terminal Form */}
+        <div className="contact-form-column">
+          <form className="contact-minimal-terminal" onSubmit={handleSubmit} noValidate>
+            <div className="field-row">
               <input
-                id="tx-name"
                 type="text"
-                className="terminal-input"
-                placeholder="e.g. Alex Mercer"
+                className="minimal-line-input"
+                placeholder="Name"
                 value={formData.name}
                 onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
                 required
               />
             </div>
 
-            {/* Input: Email or WhatsApp */}
-            {formData.method === 'email' ? (
-              <div className="terminal-input-group">
-                <label htmlFor="tx-email" className="terminal-label">ELECTRONIC MAIL</label>
-                <input
-                  id="tx-email"
-                  type="email"
-                  className="terminal-input"
-                  placeholder="alex@domain.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-                  required
-                />
-              </div>
-            ) : (
-              <div className="terminal-input-group">
-                <label htmlFor="tx-phone" className="terminal-label">WHATSAPP NUMBER</label>
-                <input
-                  id="tx-phone"
-                  type="tel"
-                  className="terminal-input"
-                  placeholder="+91 9876543210"
-                  value={formData.phone}
-                  onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
-                  required
-                />
-              </div>
-            )}
+            <div className="field-row">
+              <input
+                type="email"
+                className="minimal-line-input"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+                required
+              />
+            </div>
 
-            {/* Input: Message */}
-            <div className="terminal-input-group">
-              <label htmlFor="tx-msg" className="terminal-label">TRANSMISSION CONTENT</label>
+            <div className="field-row">
               <textarea
-                id="tx-msg"
                 rows="4"
-                className="terminal-textarea"
-                placeholder="Tell me about your project, ideas, or timeline..."
+                className="minimal-line-input minimal-textarea"
+                placeholder="Your Message"
                 value={formData.message}
                 onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
                 required
               />
             </div>
 
-            {/* Error Message if any */}
             {errorMessage && (
-              <p className="terminal-error-note" role="alert">
-                ⚠ {errorMessage}
+              <p className="contact-error-note" role="alert">
+                {errorMessage}
               </p>
             )}
 
-            {/* Micro-Interaction Transmission Button */}
             <button
               type="submit"
               disabled={status === 'transmitting'}
-              className={`transmission-submit-btn ${status}`}
+              className={`send-transmission-pill ${status}`}
             >
-              <span className="light-pulse-runner" />
               {status === 'idle' && (
                 <>
                   <span>SEND TRANSMISSION</span>
-                  <FiSend size={15} />
+                  <span className="pill-arrow-circle">
+                    <FiArrowRight size={13} />
+                  </span>
                 </>
               )}
               {status === 'transmitting' && (
                 <>
-                  <span className="spin-dot" />
+                  <span className="dot-pulse" />
                   <span>TRANSMITTING...</span>
                 </>
               )}
               {status === 'sent' && (
                 <>
-                  <FiCheck size={16} />
+                  <FiCheck size={15} />
                   <span>MESSAGE SENT ✓</span>
                 </>
               )}
               {status === 'error' && (
                 <>
                   <span>TRANSMISSION FAILED</span>
-                  <FiArrowRight size={14} />
+                  <FiArrowRight size={13} />
                 </>
               )}
             </button>

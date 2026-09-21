@@ -1,122 +1,89 @@
 import { motion } from 'framer-motion'
-import { FiGithub, FiLinkedin, FiArrowDown } from 'react-icons/fi'
-import { MagneticButton } from './MagneticButton'
+import { SectionHeaderMeta } from './SectionHeaderMeta'
+import { FiArrowDown } from 'react-icons/fi'
 
 export function Hero({ onNavClick }) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.18,
-        delayChildren: 0.25,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] },
-    },
-  }
-
   return (
-    <section id="home" className="hero-section">
-      <motion.div
-        className="hero-container"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Micro Category Badge */}
-        <motion.div variants={itemVariants} className="hero-badge">
-          <span className="badge-dot" />
-          <span>PORTFOLIO // 2026</span>
-        </motion.div>
+    <section id="home" className="ref-hero-stage">
+      {/* Top Editorial Metadata */}
+      <SectionHeaderMeta
+        number="01"
+        title="HOME"
+        subline={<>CINEMATIC ENTRANCE<br />DRAGON REVEAL</>}
+        rightMeta={[
+          'IDEAS',
+          'CODE',
+          'SCIENCE',
+          'WORLDS',
+          '/',
+          'BUILDING A MORE INTERACTIVE TOMORROW',
+        ]}
+      />
 
-        {/* Main Cinematic Title */}
-        <motion.h1 variants={itemVariants} className="hero-title">
-          <span className="title-letter-block">SAHANA F</span>
+      {/* Main Asymmetric Composition */}
+      <div className="hero-asymmetric-content">
+        {/* Glowing Editorial Headline */}
+        <motion.h1
+          className="hero-main-title"
+          initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="name-cyan">Sahana</span> <span className="name-magenta">F</span>
         </motion.h1>
 
-        {/* Dynamic Subheading */}
-        <motion.div variants={itemVariants} className="hero-role-wrap">
-          <h2 className="hero-role">CREATIVE TECHNOLOGIST</h2>
-        </motion.div>
+        {/* Subtitle Role */}
+        <motion.h2
+          className="hero-role-title"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+        >
+          CREATIVE TECHNOLOGIST
+        </motion.h2>
 
-        {/* Domain Line */}
-        <motion.p variants={itemVariants} className="hero-tagline">
-          BIOINFORMATICS <span className="hero-cross">×</span> DEVELOPMENT <span className="hero-cross">×</span> DIGITAL EXPERIENCES
+        {/* Triple Domain Kicker */}
+        <motion.p
+          className="hero-domain-strip"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35, duration: 0.8 }}
+        >
+          BIOINFORMATICS <span className="dim-cross">×</span> DEVELOPMENT <span className="dim-cross">×</span> DIGITAL EXPERIENCES
         </motion.p>
 
-        {/* Refined Description */}
-        <motion.p variants={itemVariants} className="hero-subtext">
-          Crafting responsive, high-performance web applications and immersive digital interfaces where computational intelligence meets spatial design.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div variants={itemVariants} className="hero-cta-group">
-          <MagneticButton
-            className="primary-btn"
+        {/* Action Buttons */}
+        <motion.div
+          className="hero-btn-row"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          <button
+            className="hero-primary-pill"
             onClick={() => onNavClick('projects')}
           >
-            VIEW PROJECTS
-          </MagneticButton>
-          <MagneticButton
-            className="secondary-btn"
+            View Projects
+          </button>
+          <button
+            className="hero-secondary-pill"
             onClick={() => onNavClick('contact')}
           >
-            CONTACT ME
-          </MagneticButton>
+            Contact Me
+          </button>
         </motion.div>
+      </div>
 
-        {/* Social Links */}
-        <motion.div variants={itemVariants} className="hero-social-row">
-          <a
-            href="https://github.com/sahanafrancis24"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub Profile"
-            className="hero-social-icon"
-            data-cursor="source"
-          >
-            <FiGithub size={19} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/sahana-f-0427492a9"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn Profile"
-            className="hero-social-icon"
-          >
-            <FiLinkedin size={19} />
-          </a>
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll Down Indicator */}
-      <motion.div
-        className="scroll-indicator"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
+      {/* Bottom Scroll Indicator */}
+      <div
+        className="hero-bottom-scroll"
         onClick={() => onNavClick('about')}
         role="button"
         tabIndex={0}
       >
-        <span className="scroll-text">SCROLL TO ENTER</span>
-        <motion.div
-          className="scroll-line-track"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        >
-          <FiArrowDown size={14} className="scroll-arrow" />
-        </motion.div>
-      </motion.div>
+        <span className="scroll-arrow-line">↓</span>
+        <span className="scroll-caption">SCROLL TO ENTER</span>
+      </div>
     </section>
   )
 }

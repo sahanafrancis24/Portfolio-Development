@@ -1,17 +1,17 @@
 import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
-import { SectionLabel } from './SectionLabel'
+import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { ProjectCard } from './ProjectCard'
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import { FiArrowRight, FiArrowLeft } from 'react-icons/fi'
 
 export function ProjectMarquee({ projects = [] }) {
   const [row1Paused, setRow1Paused] = useState(false)
   const [row2Paused, setRow2Paused] = useState(false)
 
-  // Split projects into 2 balanced rows
+  // Split projects into 2 distinct rows
   const { row1, row2 } = useMemo(() => {
     const r1 = []
     const r2 = []
+
     projects.forEach((item, index) => {
       if (index % 2 === 0) {
         r1.push(item)
@@ -20,73 +20,84 @@ export function ProjectMarquee({ projects = [] }) {
       }
     })
 
-    // Ensure minimum 5 items per row by looping if needed
-    let fullR1 = [...r1]
-    while (fullR1.length < 5) fullR1 = [...fullR1, ...r1]
+    // Ensure at least 5 items per row by looping if needed
+    let full1 = [...r1]
+    while (full1.length < 5) full1 = [...full1, ...r1]
 
-    let fullR2 = [...r2]
-    while (fullR2.length < 5) fullR2 = [...fullR2, ...r2]
+    let full2 = [...r2]
+    while (full2.length < 5) full2 = [...full2, ...r2]
 
-    return { row1: fullR1, row2: fullR2 }
+    return { row1: full1, row2: full2 }
   }, [projects])
 
   return (
-    <section id="projects" className="projects-marquee-section">
-      <div className="projects-header-wrap">
-        <SectionLabel
-          number="03"
-          label="PROJECTS"
-          subtitle="SELECTED WORK // REAL PROJECTS. REAL IMPACT."
-        />
-        <div className="marquee-nav-indicators" aria-hidden="true">
-          <span className="marquee-dir-indicator">
-            <FiArrowLeft size={14} className="dir-icon-anim-l" /> LTR
-          </span>
-          <span className="indicator-sep">•</span>
-          <span className="marquee-dir-indicator">
-            RTL <FiArrowRight size={14} className="dir-icon-anim-r" />
-          </span>
-        </div>
+    <section id="projects" className="ref-projects-stage">
+      {/* Top Editorial Metadata */}
+      <SectionHeaderMeta
+        number="03"
+        title="PROJECTS"
+        subline={<>AUTOMATIC SLIDING<br />DUAL MARQUEE</>}
+        rightMeta={[
+          'DRAGONS BUILD WORLDS TOO',
+          '/',
+          'HOVER TO EXPLORE',
+          '/',
+        ]}
+      />
+
+      {/* Section Header */}
+      <div className="projects-heading-row">
+        <h2 className="projects-title-white">SELECTED WORK</h2>
+        <span className="projects-title-sub">REAL PROJECTS. REAL IMPACT.</span>
       </div>
 
-      <div className="marquee-stage-container">
-        {/* Ambient Gradient Fades on Left & Right Edges */}
-        <div className="marquee-edge-fade left-fade" />
-        <div className="marquee-edge-fade right-fade" />
-
-        {/* Row 1: Left to Right */}
-        <div
-          className={`marquee-row-track track-ltr ${row1Paused ? 'is-paused' : ''}`}
-          onMouseEnter={() => setRow1Paused(true)}
-          onMouseLeave={() => setRow1Paused(false)}
-        >
-          <div className="marquee-inner-loop">
-            {row1.map((p, idx) => (
-              <ProjectCard key={`r1-a-${p.id || idx}`} project={p} />
-            ))}
+      {/* Dual Marquee Track Rows */}
+      <div className="dual-marquee-viewport">
+        {/* ROW 1 (Cyan Theme with Glowing Arrow Badge) */}
+        <div className="marquee-row-wrapper">
+          <div className="marquee-arrow-badge arrow-cyan" aria-hidden="true">
+            <FiArrowRight size={20} />
           </div>
-          <div className="marquee-inner-loop" aria-hidden="true">
-            {row1.map((p, idx) => (
-              <ProjectCard key={`r1-b-${p.id || idx}`} project={p} />
-            ))}
+
+          <div
+            className={`marquee-scroller scroller-ltr ${row1Paused ? 'is-paused' : ''}`}
+            onMouseEnter={() => setRow1Paused(true)}
+            onMouseLeave={() => setRow1Paused(false)}
+          >
+            <div className="scroller-track">
+              {row1.map((p, idx) => (
+                <ProjectCard key={`r1-1-${p.id || idx}`} project={p} theme="cyan" />
+              ))}
+            </div>
+            <div className="scroller-track" aria-hidden="true">
+              {row1.map((p, idx) => (
+                <ProjectCard key={`r1-2-${p.id || idx}`} project={p} theme="cyan" />
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Row 2: Right to Left */}
-        <div
-          className={`marquee-row-track track-rtl ${row2Paused ? 'is-paused' : ''}`}
-          onMouseEnter={() => setRow2Paused(true)}
-          onMouseLeave={() => setRow2Paused(false)}
-        >
-          <div className="marquee-inner-loop">
-            {row2.map((p, idx) => (
-              <ProjectCard key={`r2-a-${p.id || idx}`} project={p} />
-            ))}
+        {/* ROW 2 (Purple/Magenta Theme with Glowing Arrow Badge) */}
+        <div className="marquee-row-wrapper">
+          <div className="marquee-arrow-badge arrow-magenta" aria-hidden="true">
+            <FiArrowLeft size={20} />
           </div>
-          <div className="marquee-inner-loop" aria-hidden="true">
-            {row2.map((p, idx) => (
-              <ProjectCard key={`r2-b-${p.id || idx}`} project={p} />
-            ))}
+
+          <div
+            className={`marquee-scroller scroller-rtl ${row2Paused ? 'is-paused' : ''}`}
+            onMouseEnter={() => setRow2Paused(true)}
+            onMouseLeave={() => setRow2Paused(false)}
+          >
+            <div className="scroller-track">
+              {row2.map((p, idx) => (
+                <ProjectCard key={`r2-1-${p.id || idx}`} project={p} theme="magenta" />
+              ))}
+            </div>
+            <div className="scroller-track" aria-hidden="true">
+              {row2.map((p, idx) => (
+                <ProjectCard key={`r2-2-${p.id || idx}`} project={p} theme="magenta" />
+              ))}
+            </div>
           </div>
         </div>
       </div>

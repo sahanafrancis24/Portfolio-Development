@@ -41,7 +41,7 @@ function MultiverseDragon() {
       // 2. Flight Path Waypoints across 6 sections:
       // Home -> About -> Projects -> Skills -> GitHub -> Contact
       const waypoints = [
-        { pos: new THREE.Vector3(0, -1, 0), rot: new THREE.Euler(0, 0, 0) },              // 01 Home: Center
+        { pos: new THREE.Vector3(2.8, -0.4, 0), rot: new THREE.Euler(0, -0.5, 0.05) },    // 01 Home: Right-side hero presence
         { pos: new THREE.Vector3(3.6, 0, -2.2), rot: new THREE.Euler(0, -0.65, 0.08) },    // 02 About: Right side framing
         { pos: new THREE.Vector3(0, -2.4, -3.8), rot: new THREE.Euler(-0.2, 0, 0) },       // 03 Projects: Deep background, low
         { pos: new THREE.Vector3(-3.6, 0, -2.2), rot: new THREE.Euler(0, 0.65, -0.08) },   // 04 Skills: Left side framing
