@@ -62,7 +62,7 @@ export function GithubLiveFeed() {
 
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="04"
+        number="05"
         title="GITHUB"
         subline={<>LIVE DATA<br />AUTOMATICALLY UPDATES</>}
         rightMeta={[

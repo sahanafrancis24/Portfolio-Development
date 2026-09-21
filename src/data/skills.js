@@ -22,8 +22,8 @@ export const skillNodes = [
     title: 'FRONTEND',
     subtitle: 'HTML5 · CSS3 · JavaScript · React.js',
     category: 'Client-Side Architecture',
-    angle: 90, // Top
-    distance: 210,
+    pctX: 35.35,
+    pctY: 23.14,
     color: '#f59e0b', // Warm Amber
     icon: 'FiCode',
     summary:
@@ -43,8 +43,8 @@ export const skillNodes = [
     title: 'BACKEND',
     subtitle: 'Node.js · Express.js',
     category: 'Server & API Systems',
-    angle: 45, // Top Right
-    distance: 235,
+    pctX: 53.19,
+    pctY: 26.86,
     color: '#c026d3', // Magenta / Purple
     icon: 'FiServer',
     summary:
@@ -64,8 +64,8 @@ export const skillNodes = [
     title: 'DATABASES',
     subtitle: 'MySQL · Firebase',
     category: 'Data Persistence & Modeling',
-    angle: 0, // Right
-    distance: 250,
+    pctX: 58.40,
+    pctY: 45.80,
     color: '#00f5ff', // Electric Cyan
     icon: 'FiDatabase',
     summary:
@@ -85,8 +85,8 @@ export const skillNodes = [
     title: 'PROGRAMMING',
     subtitle: 'Python',
     category: 'Core Logic & Computation',
-    angle: 315, // Bottom Right
-    distance: 235,
+    pctX: 53.97,
+    pctY: 62.21,
     color: '#a855f7', // Electric Violet
     icon: 'FiTerminal',
     summary:
@@ -106,8 +106,8 @@ export const skillNodes = [
     title: 'TOOLS & TECHNOLOGIES',
     subtitle: 'Git · GitHub · VS Code',
     category: 'Developer Ecosystem & Tooling',
-    angle: 270, // Bottom
-    distance: 210,
+    pctX: 34.11,
+    pctY: 65.92,
     color: '#eab308', // Golden Amber
     icon: 'FiCpu',
     summary:
@@ -127,8 +127,8 @@ export const skillNodes = [
     title: 'UI / UX DESIGN',
     subtitle: 'Figma · Canva · Framer',
     category: 'Visual Systems & Prototyping',
-    angle: 225, // Bottom Left
-    distance: 235,
+    pctX: 15.76,
+    pctY: 62.21,
     color: '#ec4899', // Neon Pink
     icon: 'FiLayers',
     summary:
@@ -148,8 +148,8 @@ export const skillNodes = [
     title: 'BIOINFORMATICS',
     subtitle: 'BLAST · ClustalW · NCBI · MEGA · PyMOL · Cytoscape',
     category: 'Computational Biology & Genomics',
-    angle: 180, // Left
-    distance: 250,
+    pctX: 10.74,
+    pctY: 43.46,
     color: '#38bdf8', // Sky Cyan
     icon: 'FiActivity',
     summary:
@@ -169,8 +169,8 @@ export const skillNodes = [
     title: '3D DEVELOPMENT',
     subtitle: 'Unity · Blender',
     category: 'Spatial Worlds & Game Tech',
-    angle: 135, // Top Left
-    distance: 235,
+    pctX: 15.69,
+    pctY: 26.86,
     color: '#818cf8', // Indigo Purple
     icon: 'FiBox',
     summary:

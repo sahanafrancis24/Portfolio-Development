@@ -27,7 +27,7 @@ export function AboutExperience() {
     <section id="about" className="ref-about-stage">
       {/* Background Media: about.mp4 */}
       <div className="section-media-bg">
-        <video autoPlay loop muted playsInline className="section-bg-video">
+        <video autoPlay muted playsInline className="section-bg-video">
           <source src="/about.mp4" type="video/mp4" />
         </video>
         <div className="about-vignette-overlay" />
@@ -35,7 +35,7 @@ export function AboutExperience() {
 
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="01"
+        number="02"
         title="ABOUT"
         subline={<>BUILDING A<br />BRIGHTER TOMORROW</>}
         rightMeta={[

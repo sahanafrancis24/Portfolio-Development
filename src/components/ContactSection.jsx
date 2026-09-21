@@ -53,7 +53,7 @@ export function ContactSection() {
     <section id="contact" className="ref-contact-stage">
       {/* Background Media: contact.mp4 */}
       <div className="section-media-bg">
-        <video autoPlay loop muted playsInline className="section-bg-video">
+        <video autoPlay muted playsInline className="section-bg-video">
           <source src="/contact.mp4" type="video/mp4" />
         </video>
         <div className="contact-vignette-overlay" />
@@ -61,7 +61,7 @@ export function ContactSection() {
 
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="05"
+        number="06"
         title="CONTACT"
         subline={<>IDEAS ALWAYS<br />FIND A WAY</>}
         rightMeta={[

@@ -7,7 +7,7 @@ export function Hero({ onNavClick }) {
     <section id="home" className="ref-hero-stage">
       {/* Background Media: home.mp4 */}
       <div className="section-media-bg">
-        <video autoPlay loop muted playsInline className="section-bg-video">
+        <video autoPlay muted playsInline className="section-bg-video">
           <source src="/home.mp4" type="video/mp4" />
         </video>
         <div className="hero-vignette-overlay" />
@@ -94,18 +94,8 @@ export function Hero({ onNavClick }) {
           </motion.div>
         </div>
 
-        {/* Right Area: Neon Script "Different Worlds / Same Mind" */}
-        <div className="hero-right-col">
-          <motion.div
-            className="hero-neon-script-box"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <span className="neon-script-main">Different Worlds</span>
-            <span className="neon-script-sub">Same Mind</span>
-          </motion.div>
-        </div>
+        {/* Right Area: Open and clear for the cursive calligraphy baked into home.mp4 */}
+        <div className="hero-right-col" aria-hidden="true" />
       </div>
 
       {/* Bottom Scroll Indicator on Right */}
