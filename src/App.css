@@ -68,6 +68,7 @@ a {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  background: #020206;
 }
 
 .master-cinematic-video {
@@ -76,13 +77,11 @@ a {
   object-fit: cover;
   object-position: center;
   display: block;
-}
-
-.master-cinematic-overlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 45% 45%, rgba(5, 5, 11, 0.38) 0%, rgba(5, 5, 11, 0.82) 100%);
-  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: contrast(1.08) saturate(1.15) brightness(1.02);
 }
 
 .global-scroll-progress {

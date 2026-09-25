@@ -128,7 +128,6 @@ export function CinematicMasterVideo({ onActiveChapterChange }) {
         preload="auto"
         className="master-cinematic-video"
       />
-      <div className="master-cinematic-overlay" />
     </div>
   )
 }

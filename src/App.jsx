@@ -13,7 +13,7 @@ import { CinematicMasterVideo } from './components/CinematicMasterVideo'
 import { useCinematicTimeline } from './hooks/useCinematicTimeline'
 import { initialProjects } from './data/projects'
 import { getPortfolioProjects } from './services/githubProjects'
-import { CHAPTER_TARGET_TIMES, TOTAL_DURATION } from './utils/cinematicTimeline'
+import { CHAPTER_TARGET_TIMES, TOTAL_DURATION, getActiveChapter } from './utils/cinematicTimeline'
 import './App.css'
 
 const navItems = [
@@ -48,23 +48,19 @@ function App() {
     })
   }, [])
 
-  // 4. Active Section Scroll Spy fallback
+  // 4. Active Section Synchronizer based on master scroll timeline
   useEffect(() => {
-    const onScroll = () => {
-      const scrollTarget = window.scrollY + window.innerHeight * 0.35
-      const sections = navItems.map((item) => document.getElementById(item.id)).filter(Boolean)
-
-      let current = 'home'
-      for (const section of sections) {
-        if (section.offsetTop <= scrollTarget) {
-          current = section.id
-        }
-      }
-      setActiveSection(current)
+    const updateActiveSection = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+      if (maxScroll <= 0) return
+      const progress = Math.max(0, Math.min(1, window.scrollY / maxScroll))
+      const currentTime = progress * TOTAL_DURATION
+      setActiveSection(getActiveChapter(currentTime))
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('scroll', updateActiveSection, { passive: true })
+    updateActiveSection()
+    return () => window.removeEventListener('scroll', updateActiveSection)
   }, [])
 
   const handleNavClick = (id) => {

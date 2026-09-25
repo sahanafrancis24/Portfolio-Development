@@ -41,29 +41,18 @@ export function useCinematicTimeline() {
 
       // ========================================================
       // 1. HOME CHAPTER (0.00s – 6.00s)
-      // 7 Granular Continuous Micro-Beats
+      // Typography visible and crisp on initial frame, responsive to scroll
       // ========================================================
-      // Beat 1: 0.00 - 0.90s Establish frame & Telemetry tag
-      tl.fromTo('.hero-telemetry-tag', { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power1.out' }, 0.0)
+      gsap.set('.hero-name-primary, .hero-role-title, .hero-kicker-pill, .hero-manifesto-reveal, .hero-narrative-lead, .hero-cta-group, .hero-bottom-scroll-cue', {
+        opacity: 1,
+        y: 0,
+      })
 
-      // Beat 2: 0.90 - 1.80s SAHANA F Mask Reveal + translateY
-      tl.fromTo('.hero-name-primary', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.9)
-
-      // Beat 3: 1.80 - 2.70s CREATIVE TECHNOLOGIST word stagger + tracking
-      tl.fromTo('.hero-role-title', { opacity: 0, y: 15, letterSpacing: '0.3em' }, { opacity: 1, y: 0, letterSpacing: '0.12em', duration: 0.9, ease: 'power2.out' }, 1.8)
-
-      // Beat 4: 2.70 - 3.60s BIOINFORMATICS × DEVELOPMENT kicker pill
-      tl.fromTo('.hero-kicker-pill', { opacity: 0, x: -25 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power2.out' }, 2.7)
-
-      // Beat 5: 3.60 - 4.50s TURN IDEAS INTO REAL WORLDS split line reveal & scale settling
-      tl.fromTo('.hero-manifesto-reveal', { opacity: 0, y: 25, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'power2.out' }, 3.6)
-
-      // Beat 6: 4.50 - 5.25s Supporting narrative lead
-      tl.fromTo('.hero-narrative-lead', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power1.out' }, 4.5)
-
-      // Beat 7: 5.25 - 6.00s CTAs + Atmospheric calligraphy
-      tl.fromTo('.hero-cta-group', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.75, ease: 'power2.out' }, 5.25)
-      tl.fromTo('.hero-atmospheric-calligraphy', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.75, ease: 'power2.out' }, 5.25)
+      // Continuous scroll progression across 0 - 6s
+      tl.fromTo('.hero-kicker-pill', { opacity: 0.85, x: -10 }, { opacity: 1, x: 0, duration: 2.0, ease: 'power1.out' }, 0.5)
+      tl.fromTo('.hero-manifesto-reveal', { scale: 0.97 }, { scale: 1, duration: 2.5, ease: 'power2.out' }, 1.5)
+      tl.fromTo('.hero-cta-group', { y: 10 }, { y: 0, duration: 2.0, ease: 'power2.out' }, 3.0)
+      tl.to('.hero-bottom-scroll-cue', { opacity: 0.3, y: 15, duration: 2.0, ease: 'power1.out' }, 4.0)
 
       // ========================================================
       // 2. HOME -> ABOUT TRANSITION (6.00s – 12.00s)
