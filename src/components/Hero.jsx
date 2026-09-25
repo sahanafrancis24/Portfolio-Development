@@ -1,10 +1,9 @@
 import { SectionHeaderMeta } from './SectionHeaderMeta'
-import { CinematicText } from './CinematicText'
 import { FiArrowRight } from 'react-icons/fi'
 
 export function Hero({ onNavClick }) {
   return (
-    <section id="home" className="ref-hero-stage">
+    <section id="home" className="cinematic-stage-layer ref-hero-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="01"
@@ -23,59 +22,55 @@ export function Hero({ onNavClick }) {
       <div className="hero-artdirected-layout">
         {/* Left Area: Typography strictly structured in clear, dark negative space */}
         <div className="hero-left-col">
-          {/* Telemetry Tag */}
-          <CinematicText revealType="clip-line" delay={0.05} className="hero-telemetry-tag">
+          {/* Beat 1: Telemetry Tag */}
+          <div className="hero-telemetry-tag">
             <span>IDEAS / CODE / SCIENCE / WORLDS</span>
-          </CinematicText>
+          </div>
 
-          {/* Primary Name & Title Hierarchy */}
-          <CinematicText as="div" revealType="clip-line" delay={0.12} className="hero-identity-box">
+          {/* Beat 2 & 3: Primary Name & Role Hierarchy */}
+          <div className="hero-identity-box">
             <h1 className="hero-name-primary">SAHANA F</h1>
             <div className="hero-role-title">CREATIVE TECHNOLOGIST</div>
-          </CinematicText>
+          </div>
 
-          {/* Domain Specialization Kicker */}
-          <CinematicText revealType="clip-line" delay={0.22}>
-            <div className="hero-kicker-pill">
-              <span className="pill-dash">—</span>
-              <span>BIOINFORMATICS × DEVELOPMENT × DIGITAL EXPERIENCES</span>
-            </div>
-          </CinematicText>
+          {/* Beat 4: Domain Specialization Kicker */}
+          <div className="hero-kicker-pill">
+            <span className="pill-dash">—</span>
+            <span>BIOINFORMATICS × DEVELOPMENT × DIGITAL EXPERIENCES</span>
+          </div>
 
-          {/* Secondary Cinematic Reveal Text */}
-          <CinematicText as="div" revealType="clip-line" delay={0.32} className="hero-manifesto-reveal">
+          {/* Beat 5: Secondary Cinematic Reveal Text */}
+          <div className="hero-manifesto-reveal">
             <h2 className="hero-bold-display">
               TURN IDEAS <br />
               <span className="text-magenta">INTO REAL WORLDS</span>
             </h2>
-          </CinematicText>
+          </div>
 
-          {/* Narrative Lead */}
-          <CinematicText revealType="words" delay={0.42} className="hero-narrative-lead">
+          {/* Beat 6: Narrative Lead */}
+          <p className="hero-narrative-lead">
             Exploring the intersection of biology, technology, and immersive digital worlds.
-          </CinematicText>
+          </p>
 
-          {/* CTAs per user instructions */}
-          <CinematicText revealType="clip-line" delay={0.52}>
-            <div className="hero-cta-group">
-              <button
-                className="hero-primary-pill"
-                onClick={() => onNavClick('projects')}
-                aria-label="View Projects"
-              >
-                <span>VIEW PROJECTS</span>
-                <FiArrowRight size={14} />
-              </button>
+          {/* Beat 7: CTAs */}
+          <div className="hero-cta-group">
+            <button
+              className="hero-primary-pill"
+              onClick={() => onNavClick('projects')}
+              aria-label="View Projects"
+            >
+              <span>VIEW PROJECTS</span>
+              <FiArrowRight size={14} />
+            </button>
 
-              <button
-                className="hero-secondary-pill"
-                onClick={() => onNavClick('contact')}
-                aria-label="Contact Me"
-              >
-                <span>CONTACT ME</span>
-              </button>
-            </div>
-          </CinematicText>
+            <button
+              className="hero-secondary-pill"
+              onClick={() => onNavClick('contact')}
+              aria-label="Contact Me"
+            >
+              <span>CONTACT ME</span>
+            </button>
+          </div>
         </div>
 
         {/* Right Area: Atmospheric calligraphy framed cleanly with the cosmic landscape & dragon */}
@@ -102,3 +97,4 @@ export function Hero({ onNavClick }) {
     </section>
   )
 }
+

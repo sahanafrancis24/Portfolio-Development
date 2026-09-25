@@ -97,26 +97,58 @@ a {
   box-shadow: 0 0 10px var(--cyan);
 }
 
-.ref-main-stream {
-  position: relative;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+/* ==========================================================
+   PINNED CINEMATIC STAGE & RUNWAY ARCHITECTURE
+   ========================================================== */
+.cinematic-stage-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   z-index: 1;
   pointer-events: none;
 }
 
-.ref-main-stream > section {
-  pointer-events: auto;
-  position: relative;
+.cinematic-stage-layer {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 5.5rem 2.5rem 3.5rem 2.5rem;
   overflow: hidden;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+/* Strict Initial Isolation: Only Home is visible; all future chapters are hidden */
+#home.cinematic-stage-layer {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#about.cinematic-stage-layer,
+#skills.cinematic-stage-layer,
+#projects.cinematic-stage-layer,
+#github.cinematic-stage-layer,
+#contact.cinematic-stage-layer {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cinematic-scroll-runway {
+  position: relative;
+  width: 100%;
+  height: var(--runway-height, 650vh);
+  pointer-events: none;
+  visibility: hidden;
+  z-index: -1;
 }
 
 /* ==========================================================
@@ -1925,9 +1957,8 @@ a {
     min-height: auto;
   }
 
-  .ref-main-stream > section {
+  .cinematic-stage-layer {
     padding: 4.5rem 1.25rem 2.5rem 1.25rem;
-    min-height: auto;
   }
 
   .about-capabilities-grid {

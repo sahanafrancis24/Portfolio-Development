@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
-import { CinematicText } from './CinematicText'
 import { FiGithub, FiLinkedin, FiMail, FiArrowRight, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 
@@ -51,7 +50,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="ref-contact-stage">
+    <section id="contact" className="cinematic-stage-layer ref-contact-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="06"
@@ -70,18 +69,16 @@ export function ContactSection() {
       <div className="contact-artdirected-layout">
         {/* Left Column: Heading, Subtitle, Social Links, and Form */}
         <div className="contact-left-col">
-          <CinematicText revealType="clip-line" delay={0.05}>
-            <span className="contact-pre-kicker">HAVE AN IDEA?</span>
-          </CinematicText>
+          <span className="contact-pre-kicker">HAVE AN IDEA?</span>
 
-          <CinematicText as="h2" revealType="clip-line" delay={0.15} className="contact-bold-heading">
+          <h2 className="contact-bold-heading">
             LET&apos;S BUILD <br />
             <span className="text-magenta">SOMETHING UNUSUAL.</span>
-          </CinematicText>
+          </h2>
 
-          <CinematicText revealType="words" delay={0.25} className="contact-subline-mantra">
+          <p className="contact-subline-mantra">
             Ideas always find a way.
-          </CinematicText>
+          </p>
 
           {/* Social Icons Strip */}
           <div className="contact-social-pill-row">

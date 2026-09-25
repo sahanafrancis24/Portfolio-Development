@@ -1,7 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { ProjectCard } from './ProjectCard'
-import { CinematicText } from './CinematicText'
 import { useScrollVelocity } from '../hooks/useScrollVelocity'
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
@@ -71,7 +70,7 @@ export function ProjectMarquee({ projects = [] }) {
   }, [projects])
 
   return (
-    <section id="projects" className="ref-projects-stage">
+    <section id="projects" className="cinematic-stage-layer ref-projects-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="04"
@@ -89,13 +88,11 @@ export function ProjectMarquee({ projects = [] }) {
       {/* Upper-Left Heading & Top-Right Action */}
       <div className="projects-upper-header">
         <div className="projects-upper-left">
-          <CinematicText revealType="clip-line" delay={0.05}>
-            <span className="projects-kicker-label">SELECTED WORK</span>
-          </CinematicText>
-          <CinematicText as="h2" revealType="clip-line" delay={0.15} className="projects-display-title">
+          <span className="projects-kicker-label">SELECTED WORK</span>
+          <h2 className="projects-display-title">
             IDEAS <br />
             <span className="text-magenta">IN ACTION</span>
-          </CinematicText>
+          </h2>
         </div>
 
         <div className="projects-upper-right">

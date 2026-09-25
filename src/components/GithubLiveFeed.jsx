@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
-import { CinematicText } from './CinematicText'
 import { FiGithub, FiStar, FiGitBranch, FiArrowRight } from 'react-icons/fi'
 
 function formatRelativeTime(dateString) {
@@ -49,7 +47,7 @@ export function GithubLiveFeed() {
   }, [])
 
   return (
-    <section id="github" className="ref-github-stage">
+    <section id="github" className="cinematic-stage-layer ref-github-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="05"
@@ -68,31 +66,27 @@ export function GithubLiveFeed() {
       <div className="github-stage-grid">
         {/* Left Title in clear negative space */}
         <div className="github-left-title-col">
-          <CinematicText revealType="clip-line" delay={0.05}>
-            <span className="github-pre-label">VERSION CONTROL</span>
-          </CinematicText>
+          <span className="github-pre-label">VERSION CONTROL</span>
 
-          <CinematicText as="h2" revealType="clip-line" delay={0.15} className="github-big-word">
+          <h2 className="github-big-word">
             GITHUB <br />
             <span className="text-magenta">LIVE FEED</span>
-          </CinematicText>
+          </h2>
 
-          <CinematicText revealType="words" delay={0.25} className="github-desc-p">
+          <p className="github-desc-p">
             Real-time telemetry stream dynamically fetched from the GitHub API. No static numbers.
-          </CinematicText>
+          </p>
 
-          <CinematicText revealType="clip-line" delay={0.35}>
-            <a
-              href="https://github.com/sahanafrancis24"
-              target="_blank"
-              rel="noreferrer"
-              className="view-github-pill"
-              aria-label="View on GitHub"
-            >
-              <span>Explore Repositories</span>
-              <FiArrowRight size={13} />
-            </a>
-          </CinematicText>
+          <a
+            href="https://github.com/sahanafrancis24"
+            target="_blank"
+            rel="noreferrer"
+            className="view-github-pill"
+            aria-label="View on GitHub"
+          >
+            <span>Explore Repositories</span>
+            <FiArrowRight size={13} />
+          </a>
         </div>
 
         {/* Right Repositories Stream */}
@@ -104,23 +98,15 @@ export function GithubLiveFeed() {
             </span>
           </div>
 
-          {/* Sequential Cards Row (x: 80px -> 0, opacity: 0 -> 1, scale: 0.96 -> 1) */}
+          {/* Sequential Cards Row */}
           <div className="github-cards-row">
-            {repos.map((repo, idx) => (
-              <motion.a
+            {repos.map((repo) => (
+              <a
                 key={repo.id}
                 href={repo.html_url}
                 target="_blank"
                 rel="noreferrer"
                 className="gh-data-card"
-                initial={{ opacity: 0, x: 80, scale: 0.96 }}
-                whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{
-                  duration: 0.55,
-                  delay: idx * 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
               >
                 <div className="gh-card-header">
                   <FiGithub size={13} className="gh-card-icon" />
@@ -144,7 +130,7 @@ export function GithubLiveFeed() {
                 <div className="gh-card-timestamp">
                   Updated {formatRelativeTime(repo.pushed_at || repo.updated_at)}
                 </div>
-              </motion.a>
+              </a>
             ))}
 
             {repos.length === 0 && !loading && (

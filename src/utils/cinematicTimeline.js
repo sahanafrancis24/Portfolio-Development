@@ -1,11 +1,13 @@
 /**
  * Central Master Timeline Configuration
  * Exactly 10 editorial windows mapping across the 55.91-second master film.
- * 
- * First 9 windows are 6.0 seconds each.
- * Final Contact window is 1.91 seconds (54s -> 55.91s).
+ *
+ * Configurable runway height decouples physical scroll speed from video duration.
  */
 export const TOTAL_DURATION = 55.91
+
+// Configurable scroll runway height (in vh). Tunable for human-scale scroll pacing.
+export const RUNWAY_HEIGHT_VH = 650
 
 export const CINEMATIC_WINDOWS = {
   home: [0, 6],
@@ -20,13 +22,60 @@ export const CINEMATIC_WINDOWS = {
   contact: [54, 55.91],
 }
 
+/**
+ * Strict Chapter Isolation Boundaries
+ * Each chapter has an explicit visibility window. Outside this window,
+ * it is strictly: visibility: hidden, opacity: 0, pointer-events: none.
+ */
+export const CHAPTER_VISIBILITY_RANGES = {
+  home: {
+    visibleRange: [0, 12.0],
+    activeRange: [0, 6.0],
+    prepRange: [6.0, 8.5],
+    transitionRange: [8.5, 12.0],
+  },
+  about: {
+    visibleRange: [8.5, 24.0],
+    transitionIn: [8.5, 12.0],
+    activeRange: [12.0, 18.0],
+    prepRange: [18.0, 20.5],
+    transitionOut: [20.5, 24.0],
+  },
+  skills: {
+    visibleRange: [20.5, 36.0],
+    transitionIn: [20.5, 24.0],
+    activeRange: [24.0, 30.0],
+    prepRange: [30.0, 32.5],
+    transitionOut: [32.5, 36.0],
+  },
+  projects: {
+    visibleRange: [32.5, 48.0],
+    transitionIn: [32.5, 36.0],
+    activeRange: [36.0, 42.0],
+    prepRange: [42.0, 44.5],
+    transitionOut: [44.5, 48.0],
+  },
+  github: {
+    visibleRange: [44.5, 54.0],
+    transitionIn: [44.5, 48.0],
+    activeRange: [48.0, 51.5],
+    prepRange: [51.5, 53.0],
+    transitionOut: [53.0, 54.0],
+  },
+  contact: {
+    visibleRange: [53.0, 55.91],
+    transitionIn: [53.0, 54.0],
+    activeRange: [54.0, 55.91],
+  },
+}
+
 export const CHAPTER_TARGET_TIMES = {
   home: 0,
-  about: 12,
-  skills: 24,
-  projects: 36,
-  github: 42,
-  contact: 54,
+  about: 12.0,
+  skills: 24.0,
+  projects: 36.0,
+  github: 48.0,
+  contact: 54.0,
 }
 
 /**
@@ -45,39 +94,22 @@ export function progressToTime(progress, duration = TOTAL_DURATION) {
 }
 
 /**
- * Returns the normalized 0.0 -> 1.0 progress of the current time within a specific window.
- * Clamped between 0 and 1.
+ * Calculates continuous 0.0 -> 1.0 progress of time within a specific beat [start, end].
  */
-export function getWindowProgress(windowKey, currentTime) {
-  const windowRange = CINEMATIC_WINDOWS[windowKey]
-  if (!windowRange) return 0
-  const [start, end] = windowRange
-  if (currentTime <= start) return 0
-  if (currentTime >= end) return 1
-  return (currentTime - start) / (end - start)
+export function getBeatProgress(time, start, end) {
+  if (time <= start) return 0
+  if (time >= end) return 1
+  return (time - start) / (end - start)
 }
 
 /**
  * Determines the currently active chapter identifier based on cinematic time.
  */
 export function getActiveChapter(currentTime) {
-  if (currentTime < 9) return 'home'
-  if (currentTime < 21) return 'about'
-  if (currentTime < 33) return 'skills'
-  if (currentTime < 42) return 'projects'
-  if (currentTime < 51) return 'github'
+  if (currentTime < 8.5) return 'home'
+  if (currentTime < 20.5) return 'about'
+  if (currentTime < 32.5) return 'skills'
+  if (currentTime < 44.5) return 'projects'
+  if (currentTime < 53.0) return 'github'
   return 'contact'
-}
-
-/**
- * Calculates continuous transition opacity between two overlapping chapters.
- * Returns { fromOpacity, toOpacity, transitionProgress }
- */
-export function getTransitionState(fromKey, toKey, transitionWindowKey, currentTime) {
-  const progress = getWindowProgress(transitionWindowKey, currentTime)
-  return {
-    fromOpacity: 1 - progress,
-    toOpacity: progress,
-    transitionProgress: progress,
-  }
 }

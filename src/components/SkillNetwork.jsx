@@ -8,7 +8,7 @@ export function SkillNetwork() {
   const [selectedSkill, setSelectedSkill] = useState(null)
 
   return (
-    <section id="skills" className="ref-skills-stage skills-cinematic-stage">
+    <section id="skills" className="cinematic-stage-layer ref-skills-stage skills-cinematic-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="03"

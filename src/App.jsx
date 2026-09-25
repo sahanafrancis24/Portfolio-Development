@@ -115,8 +115,8 @@ function App() {
         onBrandClick={() => handleNavClick('home')}
       />
 
-      {/* Main Continuous Cinematic Stream */}
-      <main className="ref-main-stream">
+      {/* Pinned Cinematic Stage Viewport (all 6 chapters reside on this single fixed stage) */}
+      <main className="cinematic-stage-viewport">
         <Hero onNavClick={handleNavClick} />
         <AboutExperience />
         <SkillNetwork />
@@ -124,6 +124,9 @@ function App() {
         <GithubLiveFeed />
         <ContactSection />
       </main>
+
+      {/* Native Scroll Runway: decouples physical scroll pacing from video duration */}
+      <div className="cinematic-scroll-runway" aria-hidden="true" />
 
       {/* Bottom Footer matching Reference */}
       <footer className="ref-footer-strip">

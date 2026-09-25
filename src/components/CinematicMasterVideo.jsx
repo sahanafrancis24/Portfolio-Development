@@ -61,7 +61,10 @@ export function CinematicMasterVideo({ onActiveChapterChange }) {
         const diff = state.targetTime - state.renderedTime
 
         if (Math.abs(diff) > EPSILON) {
-          state.renderedTime += diff * SMOOTHING_FACTOR
+          // Clamp maximum delta per frame so high-speed wheel flicks do not skip chapters
+          const maxDeltaPerFrame = 0.5
+          const clampedDiff = Math.sign(diff) * Math.min(Math.abs(diff), maxDeltaPerFrame)
+          state.renderedTime += clampedDiff * SMOOTHING_FACTOR
           // Clamp within video duration
           const clampedTime = Math.max(0, Math.min(state.duration, state.renderedTime))
           state.isSeeking = true
@@ -84,9 +87,9 @@ export function CinematicMasterVideo({ onActiveChapterChange }) {
       animFrameId = requestAnimationFrame(scrubLoop)
     }
 
-    // Master ScrollTrigger playhead mapped across full document scroll range
+    // Master ScrollTrigger playhead mapped across cinematic scroll runway
     const masterTrigger = ScrollTrigger.create({
-      trigger: document.body,
+      trigger: '.cinematic-scroll-runway',
       start: 'top top',
       end: 'bottom bottom',
       scrub: true,

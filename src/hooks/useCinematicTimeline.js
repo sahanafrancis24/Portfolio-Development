@@ -1,14 +1,16 @@
 import { useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { TOTAL_DURATION } from '../utils/cinematicTimeline'
 
 gsap.registerPlugin(ScrollTrigger)
 
 /**
  * useCinematicTimeline
- * Orchestrates chapter UI choreography synchronized with the 10 editorial windows.
- * Employs chapter-level GSAP timelines with 20-30% continuous overlap.
- * Fully reversible when scrolling backward. Zero layout jumps.
+ * Master GSAP Scroll-Driven Orchestrator (duration = 55.91s).
+ * Bound to .cinematic-scroll-runway with smooth inertia (scrub: 1.0).
+ * Implements strict chapter isolation and continuous micro-beat ranges.
+ * Fully reversible when scrolling upward. Zero accidental chapter bleed.
  */
 export function useCinematicTimeline() {
   useEffect(() => {
@@ -16,262 +18,190 @@ export function useCinematicTimeline() {
     if (prefersReducedMotion) return
 
     const ctx = gsap.context(() => {
-      // 1. Home Chapter (0–6s active, 6–12s continuous exit into About)
-      const homeSection = document.getElementById('home')
-      if (homeSection) {
-        const homeContent = homeSection.querySelector('.hero-left-col')
-        const homeCalligraphy = homeSection.querySelector('.hero-atmospheric-calligraphy')
+      // 0. Initial Explicit Chapter States
+      gsap.set('#home', { visibility: 'visible', opacity: 1, pointerEvents: 'auto', y: 0 })
+      gsap.set('#about', { visibility: 'hidden', opacity: 0, pointerEvents: 'none', y: 40 })
+      gsap.set('#skills', { visibility: 'hidden', opacity: 0, pointerEvents: 'none', scale: 0.94 })
+      gsap.set('#projects', { visibility: 'hidden', opacity: 0, pointerEvents: 'none', y: 40 })
+      gsap.set('#github', { visibility: 'hidden', opacity: 0, pointerEvents: 'none', x: -30 })
+      gsap.set('#contact', { visibility: 'hidden', opacity: 0, pointerEvents: 'none', y: 30 })
 
-        if (homeContent) {
-          gsap.fromTo(
-            homeContent,
-            { opacity: 1, y: 0 },
-            {
-              opacity: 0.1,
-              y: -40,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: homeSection,
-                start: 'center top',
-                end: 'bottom top',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
+      // Create Master 55.91s scrub timeline
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cinematic-scroll-runway',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1.0,
+        },
+      })
 
-        if (homeCalligraphy) {
-          gsap.fromTo(
-            homeCalligraphy,
-            { opacity: 1, scale: 1 },
-            {
-              opacity: 0.1,
-              scale: 0.92,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: homeSection,
-                start: 'center top',
-                end: 'bottom top',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
-      }
+      // Ensure the master timeline duration is locked to TOTAL_DURATION
+      tl.to({}, { duration: 0.01 }, TOTAL_DURATION)
 
-      // 2. About Chapter (6–12s entrance, 12–18s active, 18–24s exit into Skills)
-      const aboutSection = document.getElementById('about')
-      if (aboutSection) {
-        const aboutContent = aboutSection.querySelector('.about-left-col')
+      // ========================================================
+      // 1. HOME CHAPTER (0.00s – 6.00s)
+      // 7 Granular Continuous Micro-Beats
+      // ========================================================
+      // Beat 1: 0.00 - 0.90s Establish frame & Telemetry tag
+      tl.fromTo('.hero-telemetry-tag', { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power1.out' }, 0.0)
 
-        if (aboutContent) {
-          gsap.fromTo(
-            aboutContent,
-            { opacity: 0.2, y: 35 },
-            {
-              opacity: 1,
-              y: 0,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: aboutSection,
-                start: 'top 85%',
-                end: 'top 35%',
-                scrub: 0.6,
-              },
-            }
-          )
+      // Beat 2: 0.90 - 1.80s SAHANA F Mask Reveal + translateY
+      tl.fromTo('.hero-name-primary', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.9)
 
-          gsap.to(aboutContent, {
-            opacity: 0.15,
-            y: -35,
-            ease: 'power1.out',
-            scrollTrigger: {
-              trigger: aboutSection,
-              start: 'center top',
-              end: 'bottom top',
-              scrub: 0.6,
-            },
-          })
-        }
-      }
+      // Beat 3: 1.80 - 2.70s CREATIVE TECHNOLOGIST word stagger + tracking
+      tl.fromTo('.hero-role-title', { opacity: 0, y: 15, letterSpacing: '0.3em' }, { opacity: 1, y: 0, letterSpacing: '0.12em', duration: 0.9, ease: 'power2.out' }, 1.8)
 
-      // 3. Skills Chapter (18–24s entrance, 24–30s active, 30–36s exit into Projects)
-      const skillsSection = document.getElementById('skills')
-      if (skillsSection) {
-        const skillsPlane = skillsSection.querySelector('.skills-constellation-plane')
-        const skillsDock = skillsSection.querySelector('.skills-right-expansion-dock')
+      // Beat 4: 2.70 - 3.60s BIOINFORMATICS × DEVELOPMENT kicker pill
+      tl.fromTo('.hero-kicker-pill', { opacity: 0, x: -25 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power2.out' }, 2.7)
 
-        if (skillsPlane) {
-          gsap.fromTo(
-            skillsPlane,
-            { opacity: 0.15, scale: 0.94 },
-            {
-              opacity: 1,
-              scale: 1,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: skillsSection,
-                start: 'top 80%',
-                end: 'top 30%',
-                scrub: 0.6,
-              },
-            }
-          )
+      // Beat 5: 3.60 - 4.50s TURN IDEAS INTO REAL WORLDS split line reveal & scale settling
+      tl.fromTo('.hero-manifesto-reveal', { opacity: 0, y: 25, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'power2.out' }, 3.6)
 
-          gsap.to(skillsPlane, {
-            opacity: 0.15,
-            scale: 0.96,
-            ease: 'power1.out',
-            scrollTrigger: {
-              trigger: skillsSection,
-              start: 'center top',
-              end: 'bottom top',
-              scrub: 0.6,
-            },
-          })
-        }
+      // Beat 6: 4.50 - 5.25s Supporting narrative lead
+      tl.fromTo('.hero-narrative-lead', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power1.out' }, 4.5)
 
-        if (skillsDock) {
-          gsap.fromTo(
-            skillsDock,
-            { opacity: 0.2, x: 25 },
-            {
-              opacity: 1,
-              x: 0,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: skillsSection,
-                start: 'top 75%',
-                end: 'top 35%',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
-      }
+      // Beat 7: 5.25 - 6.00s CTAs + Atmospheric calligraphy
+      tl.fromTo('.hero-cta-group', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.75, ease: 'power2.out' }, 5.25)
+      tl.fromTo('.hero-atmospheric-calligraphy', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.75, ease: 'power2.out' }, 5.25)
 
-      // 4. Projects Chapter (30–36s entrance, 36–42s active, 42–48s exit into GitHub)
-      const projectsSection = document.getElementById('projects')
-      if (projectsSection) {
-        const projectsDeck = projectsSection.querySelector('.projects-dual-marquee-deck')
+      // ========================================================
+      // 2. HOME -> ABOUT TRANSITION (6.00s – 12.00s)
+      // 6.00 - 8.50s: Home transition prep (About strictly hidden)
+      // 8.50s: About becomes visible
+      // 8.50 - 12.00s: Home dissolves / About enters
+      // ========================================================
+      tl.to('#home', { opacity: 0, y: -50, ease: 'power2.inOut', duration: 3.5 }, 8.5)
+      tl.set('#home', { visibility: 'hidden', pointerEvents: 'none' }, 12.0)
 
-        if (projectsDeck) {
-          gsap.fromTo(
-            projectsDeck,
-            { opacity: 0.2, scale: 0.94, y: 40 },
-            {
-              opacity: 1,
-              scale: 1,
-              y: 0,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: projectsSection,
-                start: 'top 85%',
-                end: 'top 35%',
-                scrub: 0.6,
-              },
-            }
-          )
+      tl.set('#about', { visibility: 'visible' }, 8.5)
+      tl.to('#about', { opacity: 1, y: 0, ease: 'power2.out', duration: 3.5 }, 8.5)
+      tl.set('#about', { pointerEvents: 'auto' }, 12.0)
 
-          gsap.to(projectsDeck, {
-            opacity: 0.15,
-            y: -30,
-            ease: 'power1.out',
-            scrollTrigger: {
-              trigger: projectsSection,
-              start: 'center top',
-              end: 'bottom top',
-              scrub: 0.6,
-            },
-          })
-        }
-      }
+      // ========================================================
+      // 3. ABOUT CHAPTER (12.00s – 18.00s)
+      // Internal Micro-Beats
+      // ========================================================
+      // Beat 1: 12.00 - 13.20s ABOUT ME kicker & headline
+      tl.fromTo('.about-kicker-label', { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power1.out' }, 12.0)
+      tl.fromTo('.about-headline-title', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 12.3)
 
-      // 5. GitHub Chapter (42–48s entrance, 48–54s exit into Contact)
-      const githubSection = document.getElementById('github')
-      if (githubSection) {
-        const githubCol = githubSection.querySelector('.github-left-title-col')
-        const githubCards = githubSection.querySelector('.github-right-stream-col')
+      // Beat 2: 13.20 - 14.70s Narrative paragraph
+      tl.fromTo('.about-narrative-paragraph', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1.5, ease: 'power1.out' }, 13.2)
 
-        if (githubCol) {
-          gsap.fromTo(
-            githubCol,
-            { opacity: 0.2, x: -30 },
-            {
-              opacity: 1,
-              x: 0,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: githubSection,
-                start: 'top 80%',
-                end: 'top 35%',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
+      // Beat 3: 14.70 - 16.50s Supporting engineering focus items stagger
+      tl.fromTo('.about-supporting-item', { opacity: 0, x: -16 }, { opacity: 1, x: 0, stagger: 0.18, duration: 0.45, ease: 'power2.out' }, 14.7)
 
-        if (githubCards) {
-          gsap.fromTo(
-            githubCards,
-            { opacity: 0.2, scale: 0.95 },
-            {
-              opacity: 1,
-              scale: 1,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: githubSection,
-                start: 'top 80%',
-                end: 'top 35%',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
-      }
+      // Beat 4: 16.50 - 18.00s Atmospheric telemetry & composition hold
+      tl.fromTo('.about-art-telemetry', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 1.5, ease: 'power1.out' }, 16.5)
 
-      // 6. Contact Chapter (48–54s entrance, 54–55.91s final resolution)
-      const contactSection = document.getElementById('contact')
-      if (contactSection) {
-        const contactCol = contactSection.querySelector('.contact-left-col')
-        const contactMantra = contactSection.querySelector('.contact-dragon-mantra')
+      // ========================================================
+      // 4. ABOUT -> SKILLS TRANSITION (18.00s – 24.00s)
+      // 18.00 - 20.50s: About prep (Skills strictly hidden)
+      // 20.50s: Skills becomes visible
+      // 20.50 - 24.00s: About dissolves / Skills enters
+      // ========================================================
+      tl.to('#about', { opacity: 0, y: -50, ease: 'power2.inOut', duration: 3.5 }, 20.5)
+      tl.set('#about', { visibility: 'hidden', pointerEvents: 'none' }, 24.0)
 
-        if (contactCol) {
-          gsap.fromTo(
-            contactCol,
-            { opacity: 0.2, y: 30 },
-            {
-              opacity: 1,
-              y: 0,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: contactSection,
-                start: 'top 80%',
-                end: 'top 40%',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
+      tl.set('#skills', { visibility: 'visible' }, 20.5)
+      tl.to('#skills', { opacity: 1, scale: 1, ease: 'power2.out', duration: 3.5 }, 20.5)
+      tl.set('#skills', { pointerEvents: 'auto' }, 24.0)
 
-        if (contactMantra) {
-          gsap.fromTo(
-            contactMantra,
-            { opacity: 0.2, scale: 0.92 },
-            {
-              opacity: 1,
-              scale: 1,
-              ease: 'power1.out',
-              scrollTrigger: {
-                trigger: contactSection,
-                start: 'top 75%',
-                end: 'top 40%',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
-      }
+      // ========================================================
+      // 5. SKILLS CHAPTER (24.00s – 30.00s)
+      // 8 Stationary Nodes & Celestial HUD
+      // ========================================================
+      // Beat 1: 24.00 - 24.90s Central S Core activates
+      tl.fromTo('.central-constellation-core', { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: 'back.out(1.4)' }, 24.0)
+
+      // Beat 2: 24.90 - 26.10s SVG Connecting Lines draw
+      tl.fromTo('.constellation-svg-lines', { opacity: 0 }, { opacity: 1, duration: 1.2, ease: 'power1.out' }, 24.9)
+
+      // Beat 3: 26.10 - 27.30s First 4 nodes activate
+      tl.fromTo('.cosmic-skill-node:nth-of-type(-n+4)', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, stagger: 0.25, duration: 0.6, ease: 'back.out(1.5)' }, 26.1)
+
+      // Beat 4: 27.30 - 28.50s Remaining 4 nodes activate
+      tl.fromTo('.cosmic-skill-node:nth-of-type(n+5)', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, stagger: 0.25, duration: 0.6, ease: 'back.out(1.5)' }, 27.3)
+
+      // Beat 5: 28.50 - 29.40s Node telemetry & labels glow
+      tl.fromTo('.node-text-plate', { opacity: 0.3 }, { opacity: 1, duration: 0.9, ease: 'power1.out' }, 28.5)
+
+      // Beat 6: 29.40 - 30.00s Exploration Dock ready
+      tl.fromTo('.skills-right-expansion-dock', { opacity: 0, x: 25 }, { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }, 29.4)
+
+      // ========================================================
+      // 6. SKILLS -> PROJECTS TRANSITION (30.00s – 36.00s)
+      // 30.00 - 32.50s: Skills prep (Projects strictly hidden)
+      // 32.50s: Projects becomes visible
+      // 32.50 - 36.00s: Skills dissolves / Projects enters
+      // ========================================================
+      tl.to('#skills', { opacity: 0, scale: 0.94, ease: 'power2.inOut', duration: 3.5 }, 32.5)
+      tl.set('#skills', { visibility: 'hidden', pointerEvents: 'none' }, 36.0)
+
+      tl.set('#projects', { visibility: 'visible' }, 32.5)
+      tl.to('#projects', { opacity: 1, y: 0, ease: 'power2.out', duration: 3.5 }, 32.5)
+      tl.set('#projects', { pointerEvents: 'auto' }, 36.0)
+
+      // ========================================================
+      // 7. PROJECTS CHAPTER (36.00s – 42.00s)
+      // Dual-Stream Infinite Marquee & Velocity Coupling
+      // ========================================================
+      // Beat 1: 36.00 - 37.20s Projects header & display title
+      tl.fromTo('.projects-upper-header', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' }, 36.0)
+
+      // Beat 2: 37.20 - 38.80s Row 1 (LTR) cards activate
+      tl.fromTo('.marquee-track-container:nth-child(1)', { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 1.6, ease: 'power2.out' }, 37.2)
+
+      // Beat 3: 38.80 - 40.50s Row 2 (RTL) cards activate
+      tl.fromTo('.marquee-track-container:nth-child(2)', { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 1.7, ease: 'power2.out' }, 38.8)
+
+      // Beat 4: 40.50 - 42.00s Continuous Marquee Dominant Hold
+      tl.to('.projects-dual-marquee-deck', { scale: 1, duration: 1.5 }, 40.5)
+
+      // ========================================================
+      // 8. PROJECTS -> GITHUB TRANSITION (42.00s – 48.00s)
+      // 42.00 - 44.50s: Projects prep (GitHub strictly hidden)
+      // 44.50s: GitHub becomes visible
+      // 44.50 - 48.00s: Projects dissolves / GitHub enters
+      // ========================================================
+      tl.to('#projects', { opacity: 0, y: -40, ease: 'power2.inOut', duration: 3.5 }, 44.5)
+      tl.set('#projects', { visibility: 'hidden', pointerEvents: 'none' }, 48.0)
+
+      tl.set('#github', { visibility: 'visible' }, 44.5)
+      tl.to('#github', { opacity: 1, x: 0, ease: 'power2.out', duration: 3.5 }, 44.5)
+      tl.set('#github', { pointerEvents: 'auto' }, 48.0)
+
+      // ========================================================
+      // 9. GITHUB CHAPTER (48.00s – 54.00s)
+      // Live Repositories & Transition into Contact
+      // ========================================================
+      // Beat 1: 48.00 - 49.50s GitHub Left Title Col
+      tl.fromTo('.github-left-title-col', { opacity: 0, x: -35 }, { opacity: 1, x: 0, duration: 1.5, ease: 'power2.out' }, 48.0)
+
+      // Beat 2: 49.50 - 51.50s Live Repository Cards Stagger
+      tl.fromTo('.gh-data-card', { opacity: 0, x: 50, scale: 0.95 }, { opacity: 1, x: 0, scale: 1, stagger: 0.18, duration: 0.8, ease: 'power2.out' }, 49.5)
+
+      // Beat 3: 51.50 - 53.00s GitHub Prep & Hold
+      tl.to('.github-right-stream-col', { opacity: 1, duration: 1.5 }, 51.5)
+
+      // 53.00 - 54.00s: GitHub dissolves / Contact enters
+      tl.to('#github', { opacity: 0, y: -40, ease: 'power2.inOut', duration: 1.0 }, 53.0)
+      tl.set('#github', { visibility: 'hidden', pointerEvents: 'none' }, 54.0)
+
+      tl.set('#contact', { visibility: 'visible' }, 53.0)
+      tl.to('#contact', { opacity: 1, y: 0, ease: 'power2.out', duration: 1.0 }, 53.0)
+      tl.set('#contact', { pointerEvents: 'auto' }, 54.0)
+
+      // ========================================================
+      // 10. CONTACT FINAL RESOLUTION (54.00s – 55.91s)
+      // Final Form & Dragon Mantra Hold
+      // ========================================================
+      // Beat 1: 54.00 - 54.80s Contact Form & Transmission Dock
+      tl.fromTo('.contact-left-col', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 54.0)
+
+      // Beat 2: 54.80 - 55.91s Final Dragon Mantra "IDEAS ALWAYS FIND A WAY"
+      tl.fromTo('.contact-dragon-mantra', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 1.1, ease: 'power2.out' }, 54.8)
 
       ScrollTrigger.refresh()
     })
