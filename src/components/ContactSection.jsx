@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
+import { CinematicText } from './CinematicText'
 import { FiGithub, FiLinkedin, FiMail, FiArrowRight, FiCheck } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 
@@ -51,7 +52,7 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="ref-contact-stage">
-      {/* Background Media: contact.mp4 */}
+      {/* Background Media: contact.mp4 (Dragon on the cliff, final resolution) */}
       <div className="section-media-bg">
         <video autoPlay muted playsInline className="section-bg-video">
           <source src="/contact.mp4" type="video/mp4" />
@@ -77,12 +78,18 @@ export function ContactSection() {
       <div className="contact-artdirected-layout">
         {/* Left Column: Heading, Subtitle, Social Links, and Form */}
         <div className="contact-left-col">
-          <span className="contact-pre-kicker">GET IN TOUCH</span>
-          <h2 className="contact-bold-heading">
-            LET&apos;S CREATE <br />
+          <CinematicText revealType="clip-line" delay={0.05}>
+            <span className="contact-pre-kicker">HAVE AN IDEA?</span>
+          </CinematicText>
+
+          <CinematicText as="h2" revealType="clip-line" delay={0.15} className="contact-bold-heading">
+            LET&apos;S BUILD <br />
             <span className="text-magenta">SOMETHING UNUSUAL.</span>
-          </h2>
-          <p className="contact-subline-mantra">Ideas Always Find a Way</p>
+          </CinematicText>
+
+          <CinematicText revealType="words" delay={0.25} className="contact-subline-mantra">
+            Ideas always find a way.
+          </CinematicText>
 
           {/* Social Icons Strip */}
           <div className="contact-social-pill-row">
@@ -129,7 +136,7 @@ export function ContactSection() {
             </a>
           </div>
 
-          {/* Form */}
+          {/* Minimal Terminal Form */}
           <form className="contact-minimal-terminal" onSubmit={handleSubmit} noValidate>
             <div className="field-row">
               <input
@@ -177,7 +184,7 @@ export function ContactSection() {
             >
               {status === 'idle' && (
                 <>
-                  <span>SEND MESSAGE</span>
+                  <span>SEND TRANSMISSION</span>
                   <span className="pill-arrow-circle">
                     <FiArrowRight size={13} />
                   </span>
@@ -192,7 +199,7 @@ export function ContactSection() {
               {status === 'sent' && (
                 <>
                   <FiCheck size={15} />
-                  <span>MESSAGE SENT ✓</span>
+                  <span>TRANSMISSION SENT ✓</span>
                 </>
               )}
               {status === 'error' && (
@@ -205,12 +212,16 @@ export function ContactSection() {
           </form>
         </div>
 
-        {/* Right Area: Intentionally 100% clear so the cyber dragon is prominent */}
-        <div className="contact-right-col" aria-hidden="true">
-          {/* Open space framing the dragon */}
+        {/* Right Area: Framed clearly around the cyber dragon with the final atmospheric mantra */}
+        <div className="contact-right-col" aria-label="Ideas Always Find A Way">
+          <div className="contact-dragon-mantra">
+            <span className="mantra-line">IDEAS</span>
+            <span className="mantra-line">ALWAYS</span>
+            <span className="mantra-line">FIND</span>
+            <span className="mantra-line mantra-accent">A WAY</span>
+          </div>
         </div>
       </div>
     </section>
   )
 }
-

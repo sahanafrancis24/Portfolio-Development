@@ -167,21 +167,28 @@ export const skillNodes = [
     id: 'threeD',
     name: '3D Development',
     title: '3D DEVELOPMENT',
-    subtitle: 'Unity · Blender',
+    subtitle: 'Unity + Blender',
     category: 'Spatial Worlds & Game Tech',
     pctX: 15.69,
     pctY: 26.86,
     color: '#818cf8', // Indigo Purple
     icon: 'FiBox',
+    heading: 'Unity + Blender',
     summary:
-      'Building 3D meshes, spatial environments, lighting setups, camera choreography, and game interactions inside Unity and Blender.',
-    techs: ['Unity Engine', 'Blender 3D', '3D Modeling', 'GLTF/GLB Pipeline', 'Lighting & Textures', 'Spatial Physics'],
-    strengths: [
-      '3D mesh modeling & UV unwrapping',
-      'Cinematic lighting & atmospheric skyboxes',
-      'Real-time asset optimization for interactive rendering',
-      'Spatial camera choreography & scene staging',
+      'Built advanced 3D scenes and interactive prototypes using Unity and Blender, focusing on object interaction, environment setup, gameplay fundamentals, and polished player feedback. I am currently developing an immersive 3D PC indie game set in a mysterious underwater world, with a strong emphasis on environmental storytelling, atmospheric depth, resource-driven exploration, and immersive physics-based movement.\n\nThis project combines procedural water effects, dynamic lighting, and textured underwater biomes to create a believable oceanic atmosphere. The core gameplay aims to balance exploration, discovery, and narrative encounters while using Blender assets, Unity shaders, and optimized scene composition for smooth performance.',
+    techs: [
+      'Advanced 3D scene composition',
+      'Interactive world-building',
+      'Underwater atmosphere design',
+      'Exploration-driven gameplay',
+      'Performance-focused PC build',
     ],
-    projects: ['The Three Realms (3D World)', 'Digital Scene Prototyping'],
+    strengths: [
+      'Procedural water effects & dynamic lighting',
+      'Textured underwater biomes & oceanic atmosphere',
+      'Optimized Blender assets & Unity shaders',
+      'Atmospheric depth & physics-based movement',
+    ],
+    projects: ['Underwater PC Indie Game', 'The Three Realms (3D World)'],
   },
 ]

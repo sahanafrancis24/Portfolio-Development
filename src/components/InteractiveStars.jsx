@@ -1,5 +1,5 @@
 import { useRef, useMemo } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 const starsVertexShader = `
@@ -84,7 +84,6 @@ void main() {
 export function InteractiveStars({ count = 8000 }) {
   const pointsRef = useRef()
   const materialRef = useRef()
-  const { viewport } = useThree()
 
   // Generate star positions arranged in a spherical swarm
   const [positions, colors, sizes, originalPos] = useMemo(() => {

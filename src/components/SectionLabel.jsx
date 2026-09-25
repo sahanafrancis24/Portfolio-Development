@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion'
-
 export function SectionLabel({ number, label, subtitle }) {
   return (
     <div className="section-label-wrap">

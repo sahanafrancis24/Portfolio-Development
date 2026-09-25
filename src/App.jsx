@@ -5,10 +5,11 @@ import { CustomCursor } from './components/CustomCursor'
 import { ScrollProgress } from './components/ScrollProgress'
 import { Hero } from './components/Hero'
 import { AboutExperience } from './components/AboutExperience'
-import { SkillNetwork } from './components/SkillNetwork'
 import { ProjectMarquee } from './components/ProjectMarquee'
+import { SkillNetwork } from './components/SkillNetwork'
 import { GithubLiveFeed } from './components/GithubLiveFeed'
 import { ContactSection } from './components/ContactSection'
+import { useCinematicTimeline } from './hooks/useCinematicTimeline'
 import { initialProjects } from './data/projects'
 import { getPortfolioProjects } from './services/githubProjects'
 import './App.css'
@@ -16,8 +17,8 @@ import './App.css'
 const navItems = [
   { label: 'Home', id: 'home' },
   { label: 'About', id: 'about' },
-  { label: 'Skills', id: 'skills' },
   { label: 'Projects', id: 'projects' },
+  { label: 'Skills', id: 'skills' },
   { label: 'GitHub', id: 'github' },
   { label: 'Contact', id: 'contact' },
 ]
@@ -27,13 +28,16 @@ function App() {
   const [projects, setProjects] = useState(initialProjects)
   const [showLoader, setShowLoader] = useState(true)
 
-  // 1. Initial Entrance Fade
+  // 1. Initialize GSAP Chapter-Level Cinematic Timeline
+  useCinematicTimeline()
+
+  // 2. Initial Entrance Fade
   useEffect(() => {
     const timer = setTimeout(() => setShowLoader(false), 800)
     return () => clearTimeout(timer)
   }, [])
 
-  // 2. Discover GitHub Projects dynamically
+  // 3. Discover GitHub Projects dynamically
   useEffect(() => {
     getPortfolioProjects().then((discovered) => {
       if (Array.isArray(discovered) && discovered.length > 0) {
@@ -42,7 +46,7 @@ function App() {
     })
   }, [])
 
-  // 3. Active Section Scroll Spy
+  // 4. Active Section Scroll Spy
   useEffect(() => {
     const onScroll = () => {
       const scrollTarget = window.scrollY + window.innerHeight * 0.35
@@ -98,12 +102,12 @@ function App() {
         onBrandClick={() => handleNavClick('home')}
       />
 
-      {/* Main Experience Stream */}
+      {/* Main Continuous Cinematic Stream */}
       <main className="ref-main-stream">
         <Hero onNavClick={handleNavClick} />
         <AboutExperience />
-        <SkillNetwork />
         <ProjectMarquee projects={projects} />
+        <SkillNetwork />
         <GithubLiveFeed />
         <ContactSection />
       </main>
@@ -118,4 +122,3 @@ function App() {
 }
 
 export default App
-

@@ -1,6 +1,10 @@
 import { FiExternalLink, FiGithub } from 'react-icons/fi'
 
 export function ProjectCard({ project, theme = 'cyan' }) {
+  const techLabel = project.stack && project.stack.length > 0
+    ? project.stack.slice(0, 3).join(' · ')
+    : 'Full-Stack'
+
   return (
     <div className={`ref-project-card card-theme-${theme}`}>
       {/* Visual Thumbnail */}
@@ -48,7 +52,10 @@ export function ProjectCard({ project, theme = 'cyan' }) {
       {/* Typography Footer */}
       <div className="card-caption-bar">
         <h3 className="caption-title">{project.title}</h3>
-        <p className="caption-category">{project.category || 'Creative Web'}</p>
+        <div className="caption-meta-row">
+          <p className="caption-category">{project.category || 'Creative Web'}</p>
+          <span className="caption-tech-tag">{techLabel}</span>
+        </div>
       </div>
     </div>
   )

@@ -202,6 +202,36 @@ a {
 }
 
 /* ==========================================================
+   CINEMATIC TEXT UTILITIES
+   ========================================================== */
+.cinematic-line-reveal-box {
+  display: block;
+  overflow: hidden;
+  will-change: clip-path, transform, opacity;
+}
+
+.cinematic-line-reveal-inner {
+  display: block;
+  will-change: clip-path, transform, opacity;
+}
+
+.cinematic-word-wrapper {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.cinematic-word-slot {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.cinematic-word-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ==========================================================
    CUSTOM CURSOR
    ========================================================== */
 .custom-cursor-container {
@@ -472,6 +502,40 @@ a {
   text-transform: uppercase;
 }
 
+.hero-identity-box {
+  margin-bottom: 0.8rem;
+}
+
+.hero-name-primary {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1.05;
+}
+
+.hero-role-title {
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+  text-shadow: 0 0 15px var(--cyan-glow);
+}
+
+.hero-manifesto-reveal {
+  margin: 0.6rem 0 1.2rem 0;
+}
+
+.hero-manifesto-reveal .hero-bold-display {
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  margin-bottom: 0;
+}
+
 .hero-bold-display {
   margin: 0 0 1.2rem 0;
   font-family: 'Poppins', sans-serif;
@@ -536,6 +600,7 @@ a {
   align-items: center;
   gap: 0.55rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
 }
 
 .hero-primary-pill:hover {
@@ -555,6 +620,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.04em;
   transition: all 0.25s ease;
+  cursor: pointer;
 }
 
 .hero-secondary-pill:hover {
@@ -569,32 +635,28 @@ a {
   align-items: center;
 }
 
-.hero-neon-script-box {
+.hero-atmospheric-calligraphy {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  transform: rotate(-6deg);
   user-select: none;
   pointer-events: none;
 }
 
-.neon-script-main {
-  font-family: 'Poppins', cursive, sans-serif;
-  font-size: clamp(2.2rem, 4.4vw, 3.8rem);
-  font-weight: 800;
-  color: #f43f5e;
-  text-shadow: 0 0 20px rgba(244, 63, 94, 0.85), 0 0 40px rgba(168, 85, 247, 0.6);
-  letter-spacing: 0.04em;
+.calligraphy-line {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2.6rem, 5vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.15);
+  line-height: 0.95;
+  text-transform: uppercase;
 }
 
-.neon-script-sub {
-  font-family: 'Poppins', cursive, sans-serif;
-  font-size: clamp(2.2rem, 4.4vw, 3.8rem);
-  font-weight: 800;
-  color: #c026d3;
-  text-shadow: 0 0 20px rgba(192, 38, 211, 0.85), 0 0 40px rgba(99, 102, 241, 0.6);
-  letter-spacing: 0.04em;
-  margin-top: -0.5rem;
+.calligraphy-accent {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(236, 72, 153, 0.7);
+  filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.4));
 }
 
 .hero-bottom-scroll-cue {
@@ -674,14 +736,16 @@ a {
   max-width: 580px;
 }
 
-.about-capabilities-grid {
+.about-capabilities-grid,
+.about-supporting-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.85rem;
   width: 100%;
 }
 
-.about-capability-chip {
+.about-capability-chip,
+.about-supporting-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -693,13 +757,15 @@ a {
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.about-capability-chip:hover {
+.about-capability-chip:hover,
+.about-supporting-item:hover {
   transform: translateY(-2px);
   border-color: #a855f7;
   box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
 }
 
-.chip-icon-box {
+.chip-icon-box,
+.supporting-icon-box {
   color: #c084fc;
   display: flex;
   align-items: center;
@@ -708,9 +774,11 @@ a {
   height: 24px;
   border-radius: 6px;
   background: rgba(168, 85, 247, 0.15);
+  flex-shrink: 0;
 }
 
-.chip-title {
+.chip-title,
+.supporting-text {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
@@ -1018,6 +1086,69 @@ a {
   color: #c084fc;
 }
 
+.skills-idle-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.idle-content-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+}
+
+.idle-icon {
+  color: var(--cyan);
+  filter: drop-shadow(0 0 12px var(--cyan));
+  animation: pulseRotate 12s infinite linear;
+}
+
+@keyframes pulseRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.idle-subline {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--cyan);
+  text-transform: uppercase;
+}
+
+.idle-heading {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.idle-heading span {
+  color: var(--magenta);
+}
+
+.idle-desc {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  max-width: 280px;
+  margin: 0;
+}
+
+.expansion-summary-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
 /* ==========================================================
    04 — PROJECTS (DUAL CONTINUOUS MARQUEE DECKS)
    ========================================================== */
@@ -1285,6 +1416,24 @@ a {
   margin: 0;
   font-size: 0.74rem;
   color: var(--text-muted);
+}
+
+.caption-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.caption-tech-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.65rem;
+  color: var(--cyan);
+  background: rgba(0, 245, 255, 0.08);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 245, 255, 0.22);
+  white-space: nowrap;
 }
 
 /* ==========================================================
@@ -1663,7 +1812,34 @@ a {
 }
 
 .contact-right-col {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   pointer-events: none;
+}
+
+.contact-dragon-mantra {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  user-select: none;
+  pointer-events: none;
+}
+
+.mantra-line {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(2.8rem, 5.2vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.14);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.mantra-accent {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(244, 63, 94, 0.8);
+  filter: drop-shadow(0 0 25px rgba(244, 63, 94, 0.5));
 }
 
 /* ==========================================================

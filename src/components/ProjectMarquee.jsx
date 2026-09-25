@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { ProjectCard } from './ProjectCard'
+import { CinematicText } from './CinematicText'
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 export function ProjectMarquee({ projects = [] }) {
@@ -31,7 +32,7 @@ export function ProjectMarquee({ projects = [] }) {
 
   return (
     <section id="projects" className="ref-projects-stage">
-      {/* Background Media: project.mp4 (Retained loop per user instruction) */}
+      {/* Background Media: project.mp4 */}
       <div className="section-media-bg">
         <video autoPlay loop muted playsInline className="section-bg-video">
           <source src="/project.mp4" type="video/mp4" />
@@ -41,7 +42,7 @@ export function ProjectMarquee({ projects = [] }) {
 
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="04"
+        number="03"
         title="PROJECTS"
         subline={<>IDEAS<br />IN ACTION</>}
         rightMeta={[
@@ -56,11 +57,13 @@ export function ProjectMarquee({ projects = [] }) {
       {/* Upper-Left Heading & Top-Right Action */}
       <div className="projects-upper-header">
         <div className="projects-upper-left">
-          <span className="projects-kicker-label">SELECTED WORK</span>
-          <h2 className="projects-display-title">
+          <CinematicText revealType="clip-line" delay={0.05}>
+            <span className="projects-kicker-label">SELECTED WORK</span>
+          </CinematicText>
+          <CinematicText as="h2" revealType="clip-line" delay={0.15} className="projects-display-title">
             IDEAS <br />
             <span className="text-magenta">IN ACTION</span>
-          </h2>
+          </CinematicText>
         </div>
 
         <div className="projects-upper-right">
@@ -76,13 +79,13 @@ export function ProjectMarquee({ projects = [] }) {
         </div>
       </div>
 
-      {/* Dual Continuous Scrolling Marquee Deck (Left to Right & Right to Left) */}
+      {/* Dual Continuous Infinite Marquee Decks (Row 1 LTR, Row 2 RTL) */}
       <div className="projects-dual-marquee-deck">
         {/* Row 1 Track: Left to Right (LTR) */}
         <div className="marquee-track-container">
           <div className="marquee-track-label">
             <span className="dir-tag dir-tag-ltr">
-              <FiArrowRight size={12} /> SCROLL LTR
+              <FiArrowRight size={12} /> STREAM LTR
             </span>
           </div>
           <div
@@ -97,6 +100,7 @@ export function ProjectMarquee({ projects = [] }) {
                 </div>
               ))}
             </div>
+            {/* Duplicated track for 100% seamless, non-jumping infinite loop */}
             <div className="marquee-stream" aria-hidden="true">
               {row1.map((p, idx) => (
                 <div key={`r1-b-${p.id || idx}`} className="marquee-item-wrapper">
@@ -111,7 +115,7 @@ export function ProjectMarquee({ projects = [] }) {
         <div className="marquee-track-container">
           <div className="marquee-track-label">
             <span className="dir-tag dir-tag-rtl">
-              <FiArrowLeft size={12} /> SCROLL RTL
+              <FiArrowLeft size={12} /> STREAM RTL
             </span>
           </div>
           <div
@@ -126,6 +130,7 @@ export function ProjectMarquee({ projects = [] }) {
                 </div>
               ))}
             </div>
+            {/* Duplicated track for 100% seamless, non-jumping infinite loop */}
             <div className="marquee-stream" aria-hidden="true">
               {row2.map((p, idx) => (
                 <div key={`r2-b-${p.id || idx}`} className="marquee-item-wrapper">
@@ -139,4 +144,3 @@ export function ProjectMarquee({ projects = [] }) {
     </section>
   )
 }
-

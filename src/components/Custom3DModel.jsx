@@ -78,10 +78,11 @@ export function Custom3DModel({ url, scale = 1, position = [0, 0, 0], rotation =
         meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime) * 0.1
         meshRef.current.rotation.y += delta * 0.2
         break
-      case 'pulse':
+      case 'pulse': {
         const scaleFactor = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.1
         meshRef.current.scale.setScalar(scale * scaleFactor)
         break
+      }
       case 'spin':
         meshRef.current.rotation.x += delta * 0.8
         meshRef.current.rotation.y += delta * 0.5
@@ -104,9 +105,4 @@ export function Custom3DModel({ url, scale = 1, position = [0, 0, 0], rotation =
       />
     </group>
   )
-}
-
-// Preload function to improve loading performance
-export function preloadModel(url) {
-  useGLTF.preload(url)
 }

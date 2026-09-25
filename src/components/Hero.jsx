@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
+import { CinematicText } from './CinematicText'
 import { FiArrowRight } from 'react-icons/fi'
 
 export function Hero({ onNavClick }) {
   return (
     <section id="home" className="ref-hero-stage">
-      {/* Background Media: home.mp4 */}
+      {/* Background Media: home.mp4 (Cosmic city, giant moon, dragon silhouette - STRICTLY NO GIRL) */}
       <div className="section-media-bg">
         <video autoPlay muted playsInline className="section-bg-video">
           <source src="/home.mp4" type="video/mp4" />
@@ -29,73 +29,72 @@ export function Hero({ onNavClick }) {
       />
 
       <div className="hero-artdirected-layout">
-        {/* Left Area: Typography strictly in the dark space */}
+        {/* Left Area: Typography strictly structured in clear, dark negative space */}
         <div className="hero-left-col">
-          <motion.div
-            className="hero-telemetry-tag"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          {/* Telemetry Tag */}
+          <CinematicText revealType="clip-line" delay={0.05} className="hero-telemetry-tag">
             <span>IDEAS / CODE / SCIENCE / WORLDS</span>
-          </motion.div>
+          </CinematicText>
 
-          <motion.h1
-            className="hero-bold-display"
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-          >
-            TURN IDEAS <br />
-            <span className="text-magenta">INTO REAL WORLDS</span>
-          </motion.h1>
+          {/* Primary Name & Title Hierarchy */}
+          <CinematicText as="div" revealType="clip-line" delay={0.12} className="hero-identity-box">
+            <h1 className="hero-name-primary">SAHANA F</h1>
+            <div className="hero-role-title">CREATIVE TECHNOLOGIST</div>
+          </CinematicText>
 
-          <motion.div
-            className="hero-kicker-pill"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.25 }}
-          >
-            <span className="pill-dash">—</span>
-            <span>Bioinformatics × Development × Digital Experiences</span>
-          </motion.div>
+          {/* Domain Specialization Kicker */}
+          <CinematicText revealType="clip-line" delay={0.22}>
+            <div className="hero-kicker-pill">
+              <span className="pill-dash">—</span>
+              <span>BIOINFORMATICS × DEVELOPMENT × DIGITAL EXPERIENCES</span>
+            </div>
+          </CinematicText>
 
-          <motion.p
-            className="hero-narrative-lead"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
-          >
+          {/* Secondary Cinematic Reveal Text */}
+          <CinematicText as="div" revealType="clip-line" delay={0.32} className="hero-manifesto-reveal">
+            <h2 className="hero-bold-display">
+              TURN IDEAS <br />
+              <span className="text-magenta">INTO REAL WORLDS</span>
+            </h2>
+          </CinematicText>
+
+          {/* Narrative Lead */}
+          <CinematicText revealType="words" delay={0.42} className="hero-narrative-lead">
             Exploring the intersection of biology, technology, and immersive digital worlds.
-          </motion.p>
+          </CinematicText>
 
-          <motion.div
-            className="hero-cta-group"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-          >
-            <a
-              href="https://github.com/sahanafrancis24"
-              target="_blank"
-              rel="noreferrer"
-              className="hero-primary-pill"
-            >
-              <span>View GitHub</span>
-              <FiArrowRight size={14} />
-            </a>
+          {/* CTAs per user instructions */}
+          <CinematicText revealType="clip-line" delay={0.52}>
+            <div className="hero-cta-group">
+              <button
+                className="hero-primary-pill"
+                onClick={() => onNavClick('projects')}
+                aria-label="View Projects"
+              >
+                <span>VIEW PROJECTS</span>
+                <FiArrowRight size={14} />
+              </button>
 
-            <button
-              className="hero-secondary-pill"
-              onClick={() => onNavClick('projects')}
-            >
-              <span>Explore Projects</span>
-            </button>
-          </motion.div>
+              <button
+                className="hero-secondary-pill"
+                onClick={() => onNavClick('contact')}
+                aria-label="Contact Me"
+              >
+                <span>CONTACT ME</span>
+              </button>
+            </div>
+          </CinematicText>
         </div>
 
-        {/* Right Area: Open and clear for the cursive calligraphy baked into home.mp4 */}
-        <div className="hero-right-col" aria-hidden="true" />
+        {/* Right Area: Atmospheric calligraphy framed cleanly with the cosmic landscape & dragon */}
+        <div className="hero-right-col" aria-hidden="true">
+          <div className="hero-atmospheric-calligraphy">
+            <span className="calligraphy-line">DIFFERENT</span>
+            <span className="calligraphy-line">WORLDS</span>
+            <span className="calligraphy-line calligraphy-accent">SAME</span>
+            <span className="calligraphy-line calligraphy-accent">MIND</span>
+          </div>
+        </div>
       </div>
 
       {/* Bottom Scroll Indicator on Right */}
@@ -111,4 +110,3 @@ export function Hero({ onNavClick }) {
     </section>
   )
 }
-

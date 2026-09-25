@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 import { Custom3DModel } from './Custom3DModel'
 
 export function ModelViewer({
@@ -7,7 +7,6 @@ export function ModelViewer({
   animation = 'rotate',
   scale = 1,
   position = [0, 0, 0],
-  enableControls = true,
 }) {
   return (
     <div
