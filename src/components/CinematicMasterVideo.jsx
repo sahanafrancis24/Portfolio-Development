@@ -1,23 +1,35 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { TOTAL_DURATION, getActiveChapter } from '../utils/cinematicTimeline'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const SMOOTHING_FACTOR = 0.18
+const EPSILON = 0.025
+
 /**
  * CinematicMasterVideo
- * The single master video layer (vid.mp4, 55.91s) that powers the entire portfolio.
- * Native document scroll directly controls video.currentTime forward and in reverse.
- * Exactly ONE <video> exists in the DOM.
+ * Exactly ONE persistent <video> in the DOM (src="/vid.mp4", ~55.91s).
+ * Implements a targetTime / renderedTime smooth scrub physics engine via requestAnimationFrame.
+ * Fully reversible when scrolling up and down.
+ * Zero React re-renders during high-frequency scrubbing.
  */
-export function CinematicMasterVideo() {
+export function CinematicMasterVideo({ onActiveChapterChange }) {
   const videoRef = useRef(null)
+  const stateRef = useRef({
+    targetTime: 0,
+    renderedTime: 0,
+    duration: TOTAL_DURATION,
+    isSeeking: false,
+    activeChapter: 'home',
+  })
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    // Ensure video is paused so it scrubs purely by scroll
+    // Ensure video is strictly paused (never plays audio or unscroll-driven playback)
     video.pause()
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -26,47 +38,82 @@ export function CinematicMasterVideo() {
       return
     }
 
-    let targetTime = 0
-    let animFrameId = null
-    let isSeeking = false
+    // Dynamic duration from loaded video metadata
+    const handleLoadedMetadata = () => {
+      if (video.duration && !isNaN(video.duration)) {
+        stateRef.current.duration = video.duration
+      }
+    }
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
 
     const handleSeeked = () => {
-      isSeeking = false
+      stateRef.current.isSeeking = false
     }
     video.addEventListener('seeked', handleSeeked)
 
-    // Smooth scrub loop that coordinates with the browser's video decoder
-    const renderLoop = () => {
-      if (video && video.readyState >= 1 && !isSeeking) {
-        const diff = Math.abs(video.currentTime - targetTime)
-        if (diff > 0.04) {
-          isSeeking = true
-          video.currentTime = targetTime
+    let animFrameId = null
+
+    // Target / Rendered Scrub Physics Loop
+    const scrubLoop = () => {
+      const state = stateRef.current
+
+      if (video && video.readyState >= 1 && !state.isSeeking) {
+        const diff = state.targetTime - state.renderedTime
+
+        if (Math.abs(diff) > EPSILON) {
+          state.renderedTime += diff * SMOOTHING_FACTOR
+          // Clamp within video duration
+          const clampedTime = Math.max(0, Math.min(state.duration, state.renderedTime))
+          state.isSeeking = true
+          video.currentTime = clampedTime
+
+          // Update active chapter only when a discrete chapter boundary is crossed
+          const currentChapter = getActiveChapter(clampedTime)
+          if (currentChapter !== state.activeChapter) {
+            state.activeChapter = currentChapter
+            if (typeof onActiveChapterChange === 'function') {
+              onActiveChapterChange(currentChapter)
+            }
+          }
         }
       }
-      animFrameId = requestAnimationFrame(renderLoop)
+
+      // Expose to window for low-overhead synchronous inspection
+      window.__CINEMATIC_TIME__ = state.renderedTime
+
+      animFrameId = requestAnimationFrame(scrubLoop)
     }
 
-    // ScrollTrigger across the full document height
-    const st = ScrollTrigger.create({
+    // Master ScrollTrigger playhead mapped across full document scroll range
+    const masterTrigger = ScrollTrigger.create({
       trigger: document.body,
       start: 'top top',
       end: 'bottom bottom',
       scrub: true,
       onUpdate: (self) => {
-        const dur = video.duration || 55.91
-        targetTime = Math.max(0, Math.min(dur, self.progress * dur))
+        const duration = stateRef.current.duration || TOTAL_DURATION
+        stateRef.current.targetTime = self.progress * duration
       },
     })
 
-    animFrameId = requestAnimationFrame(renderLoop)
+    animFrameId = requestAnimationFrame(scrubLoop)
+
+    // Handle visibility changes (tab switch/minimize) safely
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stateRef.current.isSeeking = false
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {
       if (animFrameId) cancelAnimationFrame(animFrameId)
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
       video.removeEventListener('seeked', handleSeeked)
-      st.kill()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      masterTrigger.kill()
     }
-  }, [])
+  }, [onActiveChapterChange])
 
   return (
     <div className="cinematic-master-video-layer" aria-hidden="true">

@@ -1,12 +1,52 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { ProjectCard } from './ProjectCard'
 import { CinematicText } from './CinematicText'
+import { useScrollVelocity } from '../hooks/useScrollVelocity'
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 export function ProjectMarquee({ projects = [] }) {
   const [row1Paused, setRow1Paused] = useState(false)
   const [row2Paused, setRow2Paused] = useState(false)
+
+  const velocityRef = useScrollVelocity()
+  const lane1Ref = useRef(null)
+  const lane2Ref = useRef(null)
+
+  // Couple scroll velocity with marquee continuous motion
+  useEffect(() => {
+    let animId = null
+
+    const updateVelocity = () => {
+      const v = velocityRef.current || 0
+      // Normal playback speed is 1. Accelerates up to 3x with fast scroll
+      const speedMultiplier = 1 + Math.min(3, Math.abs(v) * 0.7)
+      // Reverse direction when scrolling upwards strongly
+      const dirFactor = v < -0.3 ? -1 : 1
+      const rate = speedMultiplier * dirFactor
+
+      if (typeof lane1Ref.current?.getAnimations === 'function') {
+        const anims = lane1Ref.current.getAnimations()
+        for (let i = 0; i < anims.length; i++) {
+          anims[i].playbackRate = rate
+        }
+      }
+
+      if (typeof lane2Ref.current?.getAnimations === 'function') {
+        const anims = lane2Ref.current.getAnimations()
+        for (let i = 0; i < anims.length; i++) {
+          anims[i].playbackRate = rate
+        }
+      }
+
+      animId = requestAnimationFrame(updateVelocity)
+    }
+
+    animId = requestAnimationFrame(updateVelocity)
+    return () => {
+      if (animId) cancelAnimationFrame(animId)
+    }
+  }, [velocityRef])
 
   // Split projects into 2 balanced rows
   const { row1, row2 } = useMemo(() => {
@@ -34,7 +74,7 @@ export function ProjectMarquee({ projects = [] }) {
     <section id="projects" className="ref-projects-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="03"
+        number="04"
         title="PROJECTS"
         subline={<>IDEAS<br />IN ACTION</>}
         rightMeta={[
@@ -81,6 +121,7 @@ export function ProjectMarquee({ projects = [] }) {
             </span>
           </div>
           <div
+            ref={lane1Ref}
             className={`marquee-scroller-lane scroller-ltr ${row1Paused ? 'is-paused' : ''}`}
             onMouseEnter={() => setRow1Paused(true)}
             onMouseLeave={() => setRow1Paused(false)}
@@ -111,6 +152,7 @@ export function ProjectMarquee({ projects = [] }) {
             </span>
           </div>
           <div
+            ref={lane2Ref}
             className={`marquee-scroller-lane scroller-rtl ${row2Paused ? 'is-paused' : ''}`}
             onMouseEnter={() => setRow2Paused(true)}
             onMouseLeave={() => setRow2Paused(false)}

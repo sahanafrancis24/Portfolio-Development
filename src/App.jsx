@@ -13,13 +13,14 @@ import { CinematicMasterVideo } from './components/CinematicMasterVideo'
 import { useCinematicTimeline } from './hooks/useCinematicTimeline'
 import { initialProjects } from './data/projects'
 import { getPortfolioProjects } from './services/githubProjects'
+import { CHAPTER_TARGET_TIMES, TOTAL_DURATION } from './utils/cinematicTimeline'
 import './App.css'
 
 const navItems = [
   { label: 'Home', id: 'home' },
   { label: 'About', id: 'about' },
-  { label: 'Projects', id: 'projects' },
   { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
   { label: 'GitHub', id: 'github' },
   { label: 'Contact', id: 'contact' },
 ]
@@ -47,7 +48,7 @@ function App() {
     })
   }, [])
 
-  // 4. Active Section Scroll Spy
+  // 4. Active Section Scroll Spy fallback
   useEffect(() => {
     const onScroll = () => {
       const scrollTarget = window.scrollY + window.innerHeight * 0.35
@@ -67,13 +68,21 @@ function App() {
   }, [])
 
   const handleNavClick = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    const targetTime = CHAPTER_TARGET_TIMES[id]
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+    if (typeof targetTime === 'number' && maxScroll > 0) {
+      const targetProgress = Math.max(0, Math.min(1, targetTime / TOTAL_DURATION))
+      const targetY = targetProgress * maxScroll
+      window.scrollTo({ top: targetY, behavior: 'smooth' })
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   return (
     <div className="app-shell">
       {/* Exactly ONE persistent master cinematic video layer (vid.mp4) */}
-      <CinematicMasterVideo />
+      <CinematicMasterVideo onActiveChapterChange={setActiveSection} />
 
       {/* Cinematic Initial Entrance Screen */}
       <AnimatePresence>
@@ -110,8 +119,8 @@ function App() {
       <main className="ref-main-stream">
         <Hero onNavClick={handleNavClick} />
         <AboutExperience />
-        <ProjectMarquee projects={projects} />
         <SkillNetwork />
+        <ProjectMarquee projects={projects} />
         <GithubLiveFeed />
         <ContactSection />
       </main>

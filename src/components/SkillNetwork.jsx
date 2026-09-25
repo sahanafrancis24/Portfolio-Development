@@ -11,7 +11,7 @@ export function SkillNetwork() {
     <section id="skills" className="ref-skills-stage skills-cinematic-stage">
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
-        number="04"
+        number="03"
         title="SKILLS"
         subline={<>KNOWLEDGE SYSTEM<br />8-NODE CONSTELLATION</>}
         rightMeta={[
