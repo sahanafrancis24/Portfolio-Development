@@ -1,69 +1,103 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { skillNodes } from '../data/skills'
+import { SectionHeaderMeta } from './SectionHeaderMeta'
 import { FiCheck, FiX, FiCompass } from 'react-icons/fi'
 
 export function SkillNetwork() {
   const [selectedSkill, setSelectedSkill] = useState(null)
 
   return (
-    <section id="skills" className="ref-skills-stage skills-clean-stage">
-      {/* Container maintaining the exact 1536x1024 aspect ratio of skills.png */}
-      <div className="skills-canvas-viewport">
-        {/* Background Image containing the artwork, baked-in constellation, labels, and right panel frame */}
-        <img
-          src="/skills.png"
-          alt="Skills Constellation Universe"
-          className="skills-native-image"
-          loading="lazy"
-        />
+    <section id="skills" className="ref-skills-stage skills-cinematic-stage">
+      {/* Top Editorial Metadata */}
+      <SectionHeaderMeta
+        number="04"
+        title="SKILLS"
+        subline={<>KNOWLEDGE SYSTEM<br />8-NODE CONSTELLATION</>}
+        rightMeta={[
+          'CORE CAPABILITIES',
+          'STATIONARY NODES',
+          'EXPAND TO EXPLORE',
+          '/',
+          'REAL EXPERIENCE',
+        ]}
+      />
 
-        {/* Minimal Non-Intrusive Top Index Tag (04 / SKILLS) */}
-        <div className="skills-minimal-top-index">
-          <span className="sk-num">04</span>
-          <span className="sk-slash">/</span>
-          <span className="sk-word">SKILLS</span>
+      {/* Main Interactive Celestial HUD Viewport */}
+      <div className="skills-hud-viewport">
+        {/* Left Side: 8-Node Celestial Constellation */}
+        <div className="skills-constellation-plane">
+          {/* Central Celestial S Core */}
+          <div className="central-constellation-core">
+            <div className="core-orbit-ring ring-1" />
+            <div className="core-orbit-ring ring-2" />
+            <div className="core-orbit-ring ring-3" />
+            <div className="core-s-badge">
+              <span>S</span>
+            </div>
+          </div>
+
+          {/* SVG Connecting Celestial Rays */}
+          <svg className="constellation-svg-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {skillNodes.map((node) => (
+              <line
+                key={`line-${node.id}`}
+                x1="35"
+                y1="45"
+                x2={node.pctX}
+                y2={node.pctY}
+                stroke={selectedSkill?.id === node.id ? node.color : 'rgba(255, 255, 255, 0.15)'}
+                strokeWidth={selectedSkill?.id === node.id ? '0.6' : '0.25'}
+                strokeDasharray={selectedSkill?.id === node.id ? 'none' : '1.5 1.5'}
+              />
+            ))}
+          </svg>
+
+          {/* Exactly 8 Stationary Interactive Nodes — Spatially anchored, NEVER moves or disappears */}
+          {skillNodes.map((node) => {
+            const isSelected = selectedSkill?.id === node.id
+
+            return (
+              <button
+                key={node.id}
+                className={`cosmic-skill-node ${isSelected ? 'is-active' : ''}`}
+                style={{
+                  left: `${node.pctX}%`,
+                  top: `${node.pctY}%`,
+                }}
+                onMouseEnter={() => setSelectedSkill(node)}
+                onClick={() => setSelectedSkill(node)}
+                onFocus={() => setSelectedSkill(node)}
+                aria-label={`Explore ${node.title}`}
+              >
+                <div
+                  className="node-pulse-pip"
+                  style={{
+                    backgroundColor: node.color,
+                    boxShadow: `0 0 16px ${node.color}`,
+                  }}
+                />
+                <div className="node-text-plate">
+                  <span className="node-title-text" style={{ color: isSelected ? node.color : '#ffffff' }}>
+                    {node.name}
+                  </span>
+                  <span className="node-sub-tools">{node.subtitle?.split('·')[0]}</span>
+                </div>
+              </button>
+            )
+          })}
         </div>
 
-        {/* Exactly 8 Stationary Hotspot Pins — Spatially anchored, NEVER moves or disappears */}
-        {skillNodes.map((node) => {
-          const isSelected = selectedSkill?.id === node.id
-
-          return (
-            <button
-              key={node.id}
-              className={`invisible-skill-hotspot ${isSelected ? 'is-active' : ''}`}
-              style={{
-                left: `${node.pctX}%`,
-                top: `${node.pctY}%`,
-              }}
-              onMouseEnter={() => setSelectedSkill(node)}
-              onClick={() => setSelectedSkill(node)}
-              onFocus={() => setSelectedSkill(node)}
-              aria-label={`Explore ${node.title}`}
-            >
-              {/* Subtle halo ring that illuminates on hover/active to show interactivity */}
-              <span
-                className="hotspot-hover-aura"
-                style={{
-                  borderColor: node.color,
-                  boxShadow: `0 0 24px ${node.color}, inset 0 0 12px ${node.color}`,
-                }}
-              />
-            </button>
-          )
-        })}
-
-        {/* Right Expansion Panel — Fits inside the artwork frame with smooth content transitions */}
+        {/* Right Side: Smooth Expansion Information Panel */}
         <div className="skills-right-expansion-dock">
           <AnimatePresence mode="wait">
             {selectedSkill ? (
               <motion.div
                 key={selectedSkill.id}
                 className="skills-native-expansion-card"
-                initial={{ opacity: 0, x: 15 }}
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -15 }}
+                exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 style={{ borderColor: selectedSkill.color }}
               >

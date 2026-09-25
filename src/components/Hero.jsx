@@ -5,14 +5,6 @@ import { FiArrowRight } from 'react-icons/fi'
 export function Hero({ onNavClick }) {
   return (
     <section id="home" className="ref-hero-stage">
-      {/* Background Media: home.mp4 (Cosmic city, giant moon, dragon silhouette - STRICTLY NO GIRL) */}
-      <div className="section-media-bg">
-        <video autoPlay muted playsInline className="section-bg-video">
-          <source src="/home.mp4" type="video/mp4" />
-        </video>
-        <div className="hero-vignette-overlay" />
-      </div>
-
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="01"

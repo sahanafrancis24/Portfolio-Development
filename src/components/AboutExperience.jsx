@@ -26,14 +26,6 @@ const supportingItems = [
 export function AboutExperience() {
   return (
     <section id="about" className="ref-about-stage">
-      {/* Background Media: about.mp4 (Girl & cosmic portal archway - exclusively in About) */}
-      <div className="section-media-bg">
-        <video autoPlay muted playsInline className="section-bg-video">
-          <source src="/about.mp4" type="video/mp4" />
-        </video>
-        <div className="about-vignette-overlay" />
-      </div>
-
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="02"
@@ -93,7 +85,7 @@ export function AboutExperience() {
           </div>
         </div>
 
-        {/* Right Column: Kept clear for the character & portal in about.mp4 */}
+        {/* Right Column: Open vista for the cosmic portal from the master video */}
         <div className="about-right-col" aria-hidden="true">
           <motion.div
             className="about-art-telemetry"

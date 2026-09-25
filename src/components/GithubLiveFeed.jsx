@@ -50,17 +50,6 @@ export function GithubLiveFeed() {
 
   return (
     <section id="github" className="ref-github-stage">
-      {/* Background Media: github.png */}
-      <div className="section-media-bg">
-        <img
-          src="/github.png"
-          alt="GitHub Cosmic Landscape"
-          className="section-bg-image"
-          loading="lazy"
-        />
-        <div className="github-vignette-overlay" />
-      </div>
-
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="05"

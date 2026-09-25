@@ -6,10 +6,8 @@ gsap.registerPlugin(ScrollTrigger)
 
 /**
  * useCinematicTimeline
- * Orchestrates chapter-level ScrollTriggers, camera push-ins, parallax depth,
- * and 20-30% cross-section overlaps matching the motion language of vid.mp4.
- * 
- * Never pins the entire 0-100% document; lets native document scrolling drive each chapter.
+ * Coordinates chapter-level scroll triggers, editorial typography reveals,
+ * and 20-30% cross-chapter overlap transitions over the single master video.
  */
 export function useCinematicTimeline() {
   useEffect(() => {
@@ -18,42 +16,25 @@ export function useCinematicTimeline() {
     if (prefersReducedMotion) return
 
     const ctx = gsap.context(() => {
-      const chapters = ['home', 'about', 'skills', 'projects', 'github', 'contact']
+      // Verified 6-chapter flow matching vid.mp4 progression
+      const chapters = ['home', 'about', 'projects', 'skills', 'github', 'contact']
 
       chapters.forEach((id) => {
         const section = document.getElementById(id)
         if (!section) return
 
-        const bgMediaEl = section.querySelector('.section-bg-video, .section-bg-image, .skills-canvas-viewport')
-        const contentCol = section.querySelector('.hero-left-col, .about-left-col, .projects-upper-header, .github-left-title-col, .contact-left-col')
+        const contentCol = section.querySelector(
+          '.hero-left-col, .about-left-col, .projects-upper-header, .skills-constellation-plane, .github-left-title-col, .contact-left-col'
+        )
 
-        // 1. Camera / Environmental Depth: Push-in & parallax on the background
-        if (bgMediaEl) {
-          gsap.fromTo(
-            bgMediaEl,
-            { scale: 1, y: 0 },
-            {
-              scale: 1.08,
-              y: 40,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 0.6,
-              },
-            }
-          )
-        }
-
-        // 2. 20-30% Chapter Overlap Transition (Out-going fade & depth push)
+        // 20-30% Chapter Overlap Transition (Out-going soft fade & upward drift as next chapter arrives)
         if (contentCol) {
           gsap.fromTo(
             contentCol,
             { y: 0, opacity: 1 },
             {
-              y: -40,
-              opacity: 0.35,
+              y: -30,
+              opacity: 0.25,
               ease: 'power1.out',
               scrollTrigger: {
                 trigger: section,
@@ -66,7 +47,7 @@ export function useCinematicTimeline() {
         }
       })
 
-      // Refresh ScrollTrigger after assets settle
+      // Refresh ScrollTrigger after DOM settlements
       ScrollTrigger.refresh()
     })
 

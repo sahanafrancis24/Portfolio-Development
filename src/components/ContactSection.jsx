@@ -52,14 +52,6 @@ export function ContactSection() {
 
   return (
     <section id="contact" className="ref-contact-stage">
-      {/* Background Media: contact.mp4 (Dragon on the cliff, final resolution) */}
-      <div className="section-media-bg">
-        <video autoPlay muted playsInline className="section-bg-video">
-          <source src="/contact.mp4" type="video/mp4" />
-        </video>
-        <div className="contact-vignette-overlay" />
-      </div>
-
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="06"

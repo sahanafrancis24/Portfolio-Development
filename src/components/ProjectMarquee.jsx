@@ -32,14 +32,6 @@ export function ProjectMarquee({ projects = [] }) {
 
   return (
     <section id="projects" className="ref-projects-stage">
-      {/* Background Media: project.mp4 */}
-      <div className="section-media-bg">
-        <video autoPlay loop muted playsInline className="section-bg-video">
-          <source src="/project.mp4" type="video/mp4" />
-        </video>
-        <div className="projects-vignette-overlay" />
-      </div>
-
       {/* Top Editorial Metadata */}
       <SectionHeaderMeta
         number="03"

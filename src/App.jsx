@@ -9,6 +9,7 @@ import { ProjectMarquee } from './components/ProjectMarquee'
 import { SkillNetwork } from './components/SkillNetwork'
 import { GithubLiveFeed } from './components/GithubLiveFeed'
 import { ContactSection } from './components/ContactSection'
+import { CinematicMasterVideo } from './components/CinematicMasterVideo'
 import { useCinematicTimeline } from './hooks/useCinematicTimeline'
 import { initialProjects } from './data/projects'
 import { getPortfolioProjects } from './services/githubProjects'
@@ -71,6 +72,9 @@ function App() {
 
   return (
     <div className="app-shell">
+      {/* Exactly ONE persistent master cinematic video layer (vid.mp4) */}
+      <CinematicMasterVideo />
+
       {/* Cinematic Initial Entrance Screen */}
       <AnimatePresence>
         {showLoader && (
