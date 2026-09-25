@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [react()],
   assetsInclude: ['**/*.glb'],
   server: {
+    watch: {
+      ignored: ['**/public/**/*.mp4', '**/public/**/*.glb'],
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
